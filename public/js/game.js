@@ -133,6 +133,8 @@ function update() {
                 alert("yay");
                 dummy=0;
                 this.socket.emit('starCollected');
+                this.ship.x = Math.floor( Math.random() * 700)+50;
+                this.ship.y = Math.floor( Math.random() * 500)+50;
                 document.getElementById('tester').innerHTML=passageArr[0] ;
             }
     }
