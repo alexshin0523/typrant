@@ -68,13 +68,30 @@ function create() {
         if (self.star) self.star.destroy();
         self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
         self.physics.add.overlap(self.ship, self.star, function () {
-            this.socket.emit('starCollected');
+            self.ship.in_battle = 1;
+            self.ship.velocity= 0;
+            self.ship.setAcceleration(0);
+
         }, null, self);
     });
 }
+///////////////////////////////
+    /////////////////////
+    ////////////////////////////////
+        var passage = "I really want a mouse to use with my computer."
+        var passageArr = passage.split(' ');
+        
+
+        document.getElementById('outPut').innerHTML=passage ;
+        var userInput;
+        var i = 0;
+///////////////////////////////
+    /////////////////////
+    ////////////////////////////////
 
 function update() {
-    if(this.ship){
+
+    if(this.ship && !this.ship.in_battle ){
         var x=this.ship.x;
         var y=this.ship.y;
         var r=this.ship.rotation;
@@ -102,10 +119,21 @@ function update() {
         else{
             this.ship.setAcceleration(0);
         }
-        /*
-        this.physics.world.wrap(this.ship,5);
-         */
 
+    }
+    else{
+            if( passageArr[i] ==document.getElementById('userInput').value){
+                ++i;
+                document.getElementById('tester').innerHTML=passageArr[i] ;
+                document.getElementById('userInput').value='' ;
+            }
+            if( !(i < passageArr.length) ){
+                i=0;
+                alert("yay");
+                this.ship.in_battle=0;
+                this.socket.emit('starCollected');
+                document.getElementById('tester').innerHTML=passageArr[0] ;
+            }
     }
 
 }
@@ -120,6 +148,8 @@ function addPlayer(self, playerInfo) {
     self.ship.setDrag(100);
     self.ship.setAngularDrag(100);
     self.ship.setMaxVelocity(200);
+    self.ship.health=50;
+    self.ship.in_battle=0;
 }
 
 function addOtherPlayers(self, playerInfo) {
