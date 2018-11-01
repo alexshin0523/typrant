@@ -1,3 +1,4 @@
+var dummy = 0;
 var config = {
   type: Phaser.AUTO,
   parent: 'phaser-example',
@@ -67,8 +68,8 @@ function create() {
     this.socket.on('starLocation', function (starLocation) {
         if (self.star) self.star.destroy();
         self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
-        self.physics.add.overlap(self.ship, self.star, function () {
-            self.ship.in_battle = 1;
+        self.physics.add.overlap(self.ship, self.otherPlayers, function () {
+            dummy = 1;
             self.ship.velocity= 0;
             self.ship.setAcceleration(0);
 
@@ -91,7 +92,7 @@ function create() {
 
 function update() {
 
-    if(this.ship && !this.ship.in_battle ){
+    if(this.ship && !dummy ){
         var x=this.ship.x;
         var y=this.ship.y;
         var r=this.ship.rotation;
@@ -130,7 +131,7 @@ function update() {
             if( !(i < passageArr.length) ){
                 i=0;
                 alert("yay");
-                this.ship.in_battle=0;
+                dummy=0;
                 this.socket.emit('starCollected');
                 document.getElementById('tester').innerHTML=passageArr[0] ;
             }
