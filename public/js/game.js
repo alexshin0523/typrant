@@ -1,167 +1,155 @@
-var dummy = 0;
-var config = {
-  type: Phaser.AUTO,
-  parent: 'phaser-example',
-  width: 800,
-  height: 600,
-  physics: {
-    default: 'arcade',
-    arcade: {
-      debug: false,
-      gravity: { y: 0 }
-    }
+var BootScene = new Phaser.Class({
+  Extends: Phaser.Scene,
+
+  initialize: function BootScene(){
+    Phaser.Scene.call(this,{key:'BootScene'});
   },
-  scene: {
-    preload: preload,
-    create: create,
-    update: update
-  } 
-};
- 
-var game = new Phaser.Game(config);
- 
-function preload() {
-    this.load.image('ship','assets/spaceShips_001.png');
-    this.load.image('otherPlayer','assets/enemyBlack5.png');
-    this.load.image('star','assets/star_gold.png');
-}
- 
-function create() {
+
+  preload: function(){
+    this.load.spritesheet('player', 'assets/RPG_assets.png', { frameWidth: 16, frameHeight: 16 });
+
+    //get map from some place
+    this.load.image('tiles', 'assets/map/spritesheet.png');
+    this.load.tilemapTiledJSON('map', 'assets/map/map.json');
+
+  },
+
+  create: function(){
+    this.scene.start('MenuScene');
+  },
+});
+
+var MenuScene = new Phaser.Class({
+  Extends: Phaser.Scene,
+
+  initialize: function MenuScene(){
+    Phaser.Scene.call(this,{key:'MenuScene'});
+  },
+
+  create: function(){
+    var TitleTxt = this.add.text(100,50,'Menu Scene');
+    var AdvanceTxt = this.add.text(100,150,'Advance');
+    AdvanceTxt.setInteractive();
+    AdvanceTxt.on(
+      'pointerdown', 
+      function()
+        {
+          this.scene.start('RoamScene');
+        }, 
+      this
+    );
+  },
+});
+
+var RoamScene = new Phaser.Class({
+  Extends: Phaser.Scene,
+
+  initialize: function RoamScene(){
+    Phaser.Scene.call(this,{key:'RoamScene'});
+  },
+
+  create: function(){
+    //socket code 
     var self = this;
     this.socket = io();
     this.otherPlayers = this.physics.add.group();
-    this.socket.on('currentPlayers', function (players) {
-        Object.keys(players).forEach(function (id) {
-            if (players[id].playerId === self.socket.id) {
-                addPlayer(self, players[id]);
-            } else {
-                addOtherPlayers(self, players[id]);
-            }
-        });
+
+    //at the beginning
+    this.socket.on('currentPlayers',function(players){
+      Object.keys(players).forEach((id)=>{
+        //add self
+        if(players[id].playerId === self.socket.id){
+          self.player = self.physics.add.sprite( players[id].x , players[id].y ,'player', 6);
+          self.player.setCollideWorldBounds(true);
+          self.cameras.main.startFollow(self.player);
+        }
+        else{ //add others
+          const otherPlayers = self.physics.add.sprite( players[id].x , players[id].y ,'player', 3);
+        }
+      });
     });
-    this.socket.on('newPlayer', function (playerInfo) {
-        addOtherPlayers(self, playerInfo);
+
+    //durring game player adding
+    this.socket.on('newPlayer', (playerInfo)=>{
+      const otherPlayers = self.physics.add.sprite( playerInfo.x , playerInfo.y ,'player', 3);
     });
-    this.socket.on('disconnect', function (playerId) {
-        self.otherPlayers.getChildren().forEach(function (otherPlayer) {
-            if (playerId === otherPlayer.playerId) {
-                otherPlayer.destroy();
-            }
-        });
+
+    //remove players
+    this.socket.on('disconnect',(playerId)=>{
+      self.otherPlayers.getChildren().forEach(function (otherPlayers) {
+        if (playerId === otherPlayers.playerId) {
+          otherPlayers.destroy();
+        }
+      });
     });
+
+    //map things
+    var map = this.make.tilemap({key:'map'});
+    var tiles = map.addTilesetImage('spritesheet', 'tiles');
+    var grass = map.createStaticLayer('Grass', tiles, 0, 0);
+    var obstacles = map.createStaticLayer('Obstacles', tiles, 0, 0);
+    obstacles.setCollisionByExclusion([-1]);
+
+    //camera things
+    this.physics.world.bounds.width = map.widthInPixels; //480
+    this.physics.world.bounds.height = map.heightInPixels;//480
+    this.cameras.main.roundPixels = true;
+    this.cameras.main.setBounds(0,0,map.widthInPixels, map.heightInPixels);
+    
+    //cursor things
     this.cursors = this.input.keyboard.createCursorKeys();
-    this.socket.on('playerMoved',function(playerInfo){
-        self.otherPlayers.getChildren().forEach(function(otherPlayer){
-            if(playerInfo.playerId === otherPlayer.playerId){
-                otherPlayer.setRotation(playerInfo.rotation);
-                otherPlayer.setPosition(playerInfo.x ,playerInfo.y);
-            }
-        });
-    });
-    this.blueScoreText = this.add.text(16, 16, '', { fontSize: '32px', fill: '#0000FF' });
-    this.redScoreText = this.add.text(584, 16, '', { fontSize: '32px', fill: '#FF0000' });
 
-    this.socket.on('scoreUpdate', function (scores) {
-        self.blueScoreText.setText('Blue: ' + scores.blue);
-        self.redScoreText.setText('Red: ' + scores.red);
-    });
-    this.socket.on('starLocation', function (starLocation) {
-        if (self.star) self.star.destroy();
-        self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
-        self.physics.add.overlap(self.ship, self.otherPlayers, function () {
-            dummy = 1;
-            self.ship.velocity= 0;
-            self.ship.setAcceleration(0);
+  },
 
-        }, null, self);
-    });
-}
-///////////////////////////////
-    /////////////////////
-    ////////////////////////////////
-        var passage = "I really want a mouse to use with my computer."
-        var passageArr = passage.split(' ');
-        
+  update: function (time, delta){
+    if(this.player){
+      this.player.body.setVelocity(0);
 
-        document.getElementById('outPut').innerHTML=passage ;
-        var userInput;
-        var i = 0;
-///////////////////////////////
-    /////////////////////
-    ////////////////////////////////
+      // Horizontal movement
+      if (this.cursors.left.isDown){
+        this.player.body.setVelocityX(-80);
+      }
+      else if (this.cursors.right.isDown){
+        this.player.body.setVelocityX(80);
+      }
 
-function update() {
-
-    if(this.ship && !dummy ){
-        var x=this.ship.x;
-        var y=this.ship.y;
-        var r=this.ship.rotation;
-        if(this.ship.oldPosition && (x !== this.ship.oldPosition.x || this.ship.oldPosition.y !== y || r !== this.ship.oldPosition.rotation)){
-            this.socket.emit('playerMovement',{x:this.ship.x,y:this.ship.y,rotation:this.ship.rotation});
-        }
-        this.ship.oldPosition={
-            x:this.ship.x,
-            y:this.ship.y,
-            rotation:this.ship.rotation
-        };
-        if(this.cursors.left.isDown){
-            this.ship.setAngularVelocity(-150);
-        }
-        else if(this.cursors.right.isDown){
-            this.ship.setAngularVelocity(150);
-        }
-        else{
-            this.ship.setAngularVelocity(0);
-        }
-
-        if(this.cursors.up.isDown){
-            this.physics.velocityFromRotation(this.ship.rotation+1.5,100,this.ship.body.acceleration);
-        }
-        else{
-            this.ship.setAcceleration(0);
-        }
-
+      // Vertical movement
+      if (this.cursors.up.isDown){
+        this.player.body.setVelocityY(-80);
+      }
+      else if (this.cursors.down.isDown){
+        this.player.body.setVelocityY(80);
+      }    
     }
-    else{
-            if( passageArr[i] ==document.getElementById('userInput').value){
-                ++i;
-                document.getElementById('tester').innerHTML=passageArr[i] ;
-                document.getElementById('userInput').value='' ;
-            }
-            if( !(i < passageArr.length) ){
-                i=0;
-                alert("yay");
-                dummy=0;
-                this.socket.emit('starCollected');
-                this.ship.x = Math.floor( Math.random() * 700)+50;
-                this.ship.y = Math.floor( Math.random() * 500)+50;
-                document.getElementById('tester').innerHTML=passageArr[0] ;
-            }
-    }
+  },
 
-}
+});
 
-function addPlayer(self, playerInfo) {
-    self.ship = self.physics.add.image(playerInfo.x, playerInfo.y, 'ship').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
-    if (playerInfo.team === 'blue') {
-        self.ship.setTint(0x0000ff);
-    } else {
-        self.ship.setTint(0xff0000);
-    }
-    self.ship.setDrag(100);
-    self.ship.setAngularDrag(100);
-    self.ship.setMaxVelocity(200);
-    self.ship.health=50;
-    self.ship.in_battle=0;
-}
+var TypeScene= new Phaser.Class({
+  Extends: Phaser.Scene,
 
-function addOtherPlayers(self, playerInfo) {
-    const otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'otherPlayer').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
-    if (playerInfo.team === 'blue') {
-        otherPlayer.setTint(0x0000ff);
-    } else {
-        otherPlayer.setTint(0xff0000);
+  initialize: function TypeScene(){
+    Phaser.Scene.call(this,{key:'TypeScene'});
+  },
+
+  create: function(){
+  }
+});
+
+var config = {
+  type: Phaser.AUTO,
+  parent: 'content',
+  width: 320,
+  height: 240,
+  zoom: 2,
+  pixelArt: true,
+  physics: {
+    default: 'arcade',
+    arcade: {
+      gravity: { y: 0 }
     }
-    otherPlayer.playerId = playerInfo.playerId;
-    self.otherPlayers.add(otherPlayer);
-}
+  },
+  scene: [ BootScene ,  MenuScene, RoamScene , TypeScene]
+};
+
+var game = new Phaser.Game(config);
