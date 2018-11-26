@@ -64,14 +64,14 @@ var RoamScene = new Phaser.Class({
           self.cameras.main.startFollow(self.player);
         }
         else{ //add others
-          const otherPlayers = self.physics.add.sprite( players[id].x , players[id].y ,'player', 3);
+          addOtherPlayers( self, players[id]);
         }
       });
     });
 
     //durring game player adding
     this.socket.on('newPlayer', (playerInfo)=>{
-      const otherPlayers = self.physics.add.sprite( playerInfo.x , playerInfo.y ,'player', 3);
+          addOtherPlayers( self, playerInfo);
     });
 
     //remove players
@@ -124,6 +124,12 @@ var RoamScene = new Phaser.Class({
   },
 
 });
+
+function addOtherPlayers(self, playerInfo){
+  const otherPlayer = self.physics.add.sprite( playerInfo.x , playerInfo.y ,'player', 3);
+  otherPlayer.playerId = playerInfo.playerId;
+  self.otherPlayers.add(otherPlayer);
+}
 
 var TypeScene= new Phaser.Class({
   Extends: Phaser.Scene,
