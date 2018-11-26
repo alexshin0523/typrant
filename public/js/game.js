@@ -83,6 +83,15 @@ var RoamScene = new Phaser.Class({
       });
     });
 
+    //move players
+    this.socket.on('playerMoved', function(playerInfo){
+      self.otherPlayers.getChildren().forEach( function(otherPlayer){
+        if( playerInfo.playerId === otherPlayer.playerId ){
+          otherPlayer.setPosition( playerInfo.x, playerInfo.y);
+        }
+      });
+    });
+
     //map things
     var map = this.make.tilemap({key:'map'});
     var tiles = map.addTilesetImage('spritesheet', 'tiles');
@@ -103,6 +112,19 @@ var RoamScene = new Phaser.Class({
 
   update: function (time, delta){
     if(this.player){
+
+      var x=this.player.x;
+      var y=this.player.y;
+
+      if(this.player.oldPosition && (x!==this.player.oldPosition.x || y!==this.player.oldPosition.y)){
+        this.socket.emit('playerMovement',{x:this.player.x,y:this.player.y});
+      }
+
+      this.player.oldPosition={
+        x:this.player.x,
+        y:this.player.y,
+      };
+
       this.player.body.setVelocity(0);
 
       // Horizontal movement

@@ -36,6 +36,12 @@ io.on('connection', function(socket){
     io.emit('disconnect',socket.id);
   });
 
+  socket.on('playerMovement', function( movementData){
+    players[socket.id].x=movementData.x;
+    players[socket.id].y=movementData.y;
+    socket.broadcast.emit('playerMoved',players[socket.id]);
+  });
+
 });
 
 
