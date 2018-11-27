@@ -53,13 +53,15 @@ var RoamScene = new Phaser.Class({
     var self = this;
     this.socket = io();
     this.otherPlayers = this.physics.add.group();
+    this.player = this.physics.add.sprite( 50 , 50 ,'player', 6);
 
     //at the beginning
     this.socket.on('currentPlayers',function(players){
       Object.keys(players).forEach((id)=>{
         //add self
         if(players[id].playerId === self.socket.id){
-          self.player = self.physics.add.sprite( players[id].x , players[id].y ,'player', 6);
+          //self.player = self.physics.add.sprite( players[id].x , players[id].y ,'player', 6);
+          self.player.setPosition( players[id].x , players[id].y);
           self.player.setCollideWorldBounds(true);
           self.cameras.main.startFollow(self.player);
         }
@@ -108,6 +110,14 @@ var RoamScene = new Phaser.Class({
     //cursor things
     this.cursors = this.input.keyboard.createCursorKeys();
 
+    //colision things
+   this.physics.add.collider(this.player,obstacles);
+    this.physics.add.overlap(this.player,this.otherPlayers, this.p2p ,null,this);
+
+  },
+
+  p2p : function( player , otherPlayers ){
+    console.log('hit');
   },
 
   update: function (time, delta){
@@ -174,7 +184,8 @@ var config = {
   physics: {
     default: 'arcade',
     arcade: {
-      gravity: { y: 0 }
+      gravity: { y: 0 },
+      debug: true
     }
   },
   scene: [ BootScene ,  MenuScene, RoamScene , TypeScene]
