@@ -42,6 +42,12 @@ io.on('connection', function(socket){
     socket.broadcast.emit('playerMoved',players[socket.id]);
   });
 
+  socket.on('p2pHit', function( playerId , otherPlayerId ){
+    let text = "we fighting";
+    socket.broadcast.to(otherPlayerId).emit('p2pBattle', text );
+    socket.emit( 'p2pBattle',text);
+  });
+
 });
 
 

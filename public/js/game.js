@@ -94,6 +94,13 @@ var RoamScene = new Phaser.Class({
       });
     });
 
+    
+
+    this.socket.on('p2pBattle', function( text ){
+      console.log(text);
+      self.scene.start( 'TypeScene' );
+    });
+
     //map things
     var map = this.make.tilemap({key:'map'});
     var tiles = map.addTilesetImage('spritesheet', 'tiles');
@@ -116,8 +123,8 @@ var RoamScene = new Phaser.Class({
 
   },
 
-  p2p : function( player , otherPlayers ){
-    console.log('hit');
+  p2p : function( player , otherPlayer ){
+    this.socket.emit( 'p2pHit', this.socket.id , otherPlayer.playerId);
   },
 
   update: function (time, delta){
@@ -171,6 +178,7 @@ var TypeScene= new Phaser.Class({
   },
 
   create: function(){
+    var TitleTxt = this.add.text(100,50,'Type Scene');
   }
 });
 
