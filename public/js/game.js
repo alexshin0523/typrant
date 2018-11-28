@@ -1,3 +1,5 @@
+var name = "Anonymous";
+
 var BootScene = new Phaser.Class({
   Extends: Phaser.Scene,
 
@@ -19,6 +21,7 @@ var BootScene = new Phaser.Class({
   },
 });
 
+
 var MenuScene = new Phaser.Class({
   Extends: Phaser.Scene,
 
@@ -27,16 +30,28 @@ var MenuScene = new Phaser.Class({
   },
 
   create: function(){
+
     var TitleTxt = this.add.text(100,50,'Menu Scene');
     var AdvanceTxt = this.add.text(100,150,'Advance');
+    var InputTxt = this.add.text(100,100,'Enter Username');
     AdvanceTxt.setInteractive();
     AdvanceTxt.on(
-      'pointerdown', 
+      'pointerdown',
       function()
         {
           this.scene.start('RoamScene');
-        }, 
+        },
       this
+    );
+    InputTxt.setInteractive();
+    InputTxt.on(
+    'pointerdown',
+    function()
+      {
+        name = prompt("Please enter your name", "Anonymous");
+        console.log(name);
+      },
+    this
     );
   },
 });
@@ -46,10 +61,13 @@ var RoamScene = new Phaser.Class({
 
   initialize: function RoamScene(){
     Phaser.Scene.call(this,{key:'RoamScene'});
+
   },
 
   create: function(){
-    //socket code 
+
+
+    //socket code
     var self = this;
     this.socket = io();
     this.otherPlayers = this.physics.add.group();
@@ -113,7 +131,7 @@ var RoamScene = new Phaser.Class({
     this.physics.world.bounds.height = map.heightInPixels;//480
     this.cameras.main.roundPixels = true;
     this.cameras.main.setBounds(0,0,map.widthInPixels, map.heightInPixels);
-    
+
     //cursor things
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -158,7 +176,7 @@ var RoamScene = new Phaser.Class({
       }
       else if (this.cursors.down.isDown){
         this.player.body.setVelocityY(80);
-      }    
+      }
     }
   },
 
@@ -197,6 +215,7 @@ var config = {
     }
   },
   scene: [ BootScene ,  MenuScene, RoamScene , TypeScene]
+
 };
 
 var game = new Phaser.Game(config);
