@@ -82,6 +82,7 @@ var RoamScene = new Phaser.Class({
           self.player.setPosition( players[id].x , players[id].y);
           self.player.setCollideWorldBounds(true);
           self.cameras.main.startFollow(self.player);
+          self.player.mass = players[id].mass;
         }
         else{ //add others
           addOtherPlayers( self, players[id]);
@@ -185,6 +186,7 @@ var RoamScene = new Phaser.Class({
 function addOtherPlayers(self, playerInfo){
   const otherPlayer = self.physics.add.sprite( playerInfo.x , playerInfo.y ,'player', 3);
   otherPlayer.playerId = playerInfo.playerId;
+  otherPlayer.mass = playerInfo.mass;
   self.otherPlayers.add(otherPlayer);
 }
 

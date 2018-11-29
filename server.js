@@ -22,6 +22,7 @@ io.on('connection', function(socket){
     x: Math.floor(Math.random() * 100 ) + 40,
     y: Math.floor(Math.random() * 100 ) + 40,
     playerId: socket.id,
+    mass: 50,
   };
 
   //send list of players to new player
