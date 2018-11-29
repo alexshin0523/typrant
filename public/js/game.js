@@ -61,7 +61,6 @@ var RoamScene = new Phaser.Class({
 
   initialize: function RoamScene(){
     Phaser.Scene.call(this,{key:'RoamScene'});
-
   },
 
   create: function(){
@@ -87,6 +86,8 @@ var RoamScene = new Phaser.Class({
         else{ //add others
           addOtherPlayers( self, players[id]);
         }
+
+        self.events.emit('boardInit', players);
       });
     });
 
@@ -113,8 +114,6 @@ var RoamScene = new Phaser.Class({
       });
     });
 
-    
-
     this.socket.on('p2pBattle', function( text ){
       console.log(text);
       self.scene.start( 'TypeScene' );
@@ -140,6 +139,11 @@ var RoamScene = new Phaser.Class({
    this.physics.add.collider(this.player,obstacles);
     this.physics.add.overlap(this.player,this.otherPlayers, this.p2p ,null,this);
 
+    //PARTH
+    //PARTH
+    //PARTH
+    //PARTH
+    this.scene.launch('HUDScene');
   },
 
   p2p : function( player , otherPlayer ){
@@ -190,6 +194,30 @@ function addOtherPlayers(self, playerInfo){
   self.otherPlayers.add(otherPlayer);
 }
 
+//HELP PLS TEAM
+//HELP PLS TEAM
+//HELP PLS TEAM
+//HELP PLS TEAM
+//HELP PLS TEAM
+var HUDScene= new Phaser.Class({
+  Extends: Phaser.Scene,
+
+  initialize: function HUDScene (){
+    Phaser.Scene.call(this,{key:'HUDScene'});
+  },
+
+  create: function(){
+    var TitleTxt = this.add.text(100,50,'HUD Scene');
+    let roamListener = this.scene.get('RoamScene');
+    roamListener.events.on('boardInit', function(players){
+      console.log('player ids: ');
+      Object.keys(players).forEach((id)=>{
+        console.log(players[id].playerId);
+      });
+    });
+  },
+});
+
 var TypeScene= new Phaser.Class({
   Extends: Phaser.Scene,
 
@@ -216,7 +244,7 @@ var config = {
       debug: true
     }
   },
-  scene: [ BootScene ,  MenuScene, RoamScene , TypeScene]
+  scene: [ BootScene ,  MenuScene, RoamScene , HUDScene , TypeScene]
 
 };
 

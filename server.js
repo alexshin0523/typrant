@@ -15,12 +15,12 @@ io.on('connection', function(socket){
 
   console.log('a user connected');
   players[socket.id]={
-    /*
     x: Math.floor(Math.random() * 420 ) + 40,
     y: Math.floor(Math.random() * 420 ) + 40,
-    */
+    /*
     x: Math.floor(Math.random() * 100 ) + 40,
     y: Math.floor(Math.random() * 100 ) + 40,
+    */
     playerId: socket.id,
     mass: 50,
   };
