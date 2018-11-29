@@ -32,8 +32,9 @@ var MenuScene = new Phaser.Class({
   create: function(){
 
     var TitleTxt = this.add.text(100,50,'Menu Scene');
-    var AdvanceTxt = this.add.text(100,150,'Advance');
     var InputTxt = this.add.text(100,100,'Enter Username');
+    var AdvanceTxt = this.add.text(100,150,'Advance');
+    var InstructionTxt = this.add.text(100,200,'Instructions');
     AdvanceTxt.setInteractive();
     AdvanceTxt.on(
       'pointerdown',
@@ -50,6 +51,44 @@ var MenuScene = new Phaser.Class({
       {
         name = prompt("Please enter your name", "Anonymous");
         console.log(name);
+      },
+    this
+    );
+    InstructionTxt.setInteractive();
+    InstructionTxt.on(
+    'pointerdown',
+    function()
+      {
+        this.scene.start('InstructionScene');
+      },
+    this
+    );
+  },
+});
+
+
+
+var InstructionScene = new Phaser.Class({
+  Extends: Phaser.Scene,
+
+  initialize: function InstructionScene(){
+    Phaser.Scene.call(this,{key:'InstructionScene'});
+    console.log("1");
+  },
+
+  preload: function(){
+    this.load.image('instructions', 'assets/TyprantInstructions.png');
+  },
+
+  create: function(){
+    this.add.image(160,120,'instructions');
+    var backTxt = this.add.text(10,10, 'Back');
+    backTxt.setInteractive();
+    backTxt.on(
+    'pointerdown',
+    function()
+      {
+        this.scene.start('MenuScene');
       },
     this
     );
@@ -242,7 +281,7 @@ var config = {
       debug: true
     }
   },
-  scene: [ BootScene ,  MenuScene, RoamScene , HUDScene , TypeScene]
+  scene: [ BootScene ,  MenuScene, RoamScene , HUDScene , TypeScene , InstructionScene]
 
 };
 
