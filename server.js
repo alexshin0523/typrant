@@ -14,6 +14,11 @@ app.get('/', function (req, res) {
 io.on('connection', function(socket){
 
   console.log('a user connected');
+  //HELP PLS TEAM
+  //HELP PLS TEAM
+  //HELP PLS TEAM
+  //HELP PLS TEAM
+  //HELP PLS TEAM
   players[socket.id]={
     x: Math.floor(Math.random() * 420 ) + 40,
     y: Math.floor(Math.random() * 420 ) + 40,
@@ -23,6 +28,8 @@ io.on('connection', function(socket){
     */
     playerId: socket.id,
     mass: 50,
+    username: 'I will connect later',
+    //^^^you might want to make this the socket.id in the mean time
   };
 
   //send list of players to new player

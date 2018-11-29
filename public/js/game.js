@@ -139,10 +139,7 @@ var RoamScene = new Phaser.Class({
    this.physics.add.collider(this.player,obstacles);
     this.physics.add.overlap(this.player,this.otherPlayers, this.p2p ,null,this);
 
-    //PARTH
-    //PARTH
-    //PARTH
-    //PARTH
+    //HUDScene Launch
     this.scene.launch('HUDScene');
   },
 
@@ -213,6 +210,7 @@ var HUDScene= new Phaser.Class({
       console.log('player ids: ');
       Object.keys(players).forEach((id)=>{
         console.log(players[id].playerId);
+        console.log(players[id].username);
       });
     });
   },
