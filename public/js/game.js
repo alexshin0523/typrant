@@ -30,11 +30,12 @@ var MenuScene = new Phaser.Class({
   },
 
   create: function(){
+    var style = { font: "12px Arial", fill: "#ffffff", align: "center" };
+    var TitleTxt = this.add.text(120,10,'Menu Scene',style);
+    var InstructionTxt = this.add.text(120,75,'Instructions',style);
+    var InputTxt = this.add.text(120,125,'Enter Username',style);
+    var AdvanceTxt = this.add.text(120,175,'Advance',style);
 
-    var TitleTxt = this.add.text(100,50,'Menu Scene');
-    var InputTxt = this.add.text(100,100,'Enter Username');
-    var AdvanceTxt = this.add.text(100,150,'Advance');
-    var InstructionTxt = this.add.text(100,200,'Instructions');
     AdvanceTxt.setInteractive();
     AdvanceTxt.on(
       'pointerdown',
