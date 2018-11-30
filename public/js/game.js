@@ -141,6 +141,15 @@ var RoamScene = new Phaser.Class({
 
     //HUDScene Launch
     this.scene.launch('HUDScene');
+
+    let battleListener = this.scene.get('TypeScene');
+    battleListener.events.on('battleEnd', function(players){
+      console.log('battle end');
+      self.player.x = Math.floor(Math.random() * 420 ) + 40;
+      self.player.y = Math.floor(Math.random() * 420 ) + 40;
+      self.socket.emit('playerMovement',{x:self.player.x,y:self.player.y});
+      self.events.emit('closeTypeScene');
+    });
   },
 
   p2p : function( player , otherPlayer ){
@@ -207,10 +216,7 @@ var HUDScene= new Phaser.Class({
     var TitleTxt = this.add.text(100,50,'HUD Scene');
     let roamListener = this.scene.get('RoamScene');
     roamListener.events.on('boardInit', function(players){
-      console.log('player ids: ');
       Object.keys(players).forEach((id)=>{
-        console.log(players[id].playerId);
-        console.log(players[id].username);
       });
     });
   },
@@ -224,9 +230,36 @@ var TypeScene= new Phaser.Class({
   },
 
   create: function(){
-    var TitleTxt = this.add.text(100,50,'Type Scene');
-  }
+    var self = this;
+    var TitleTxt = this.add.text(100,50,
+      'Type Scene hey what is up buddy'
+    );
+    let roamListener = this.scene.get('RoamScene');
+    roamListener.events.on('closeTypeScene' , function(){
+      console.log('type scene');
+      self.scene.start( 'RoamScene' );
+    });
+  },
+
+  update: function(){
+    if( (i < passageArr.length) ){
+      if( passageArr[i] ==document.getElementById('userInput').value){
+        ++i;
+        document.getElementById('tester').innerHTML=passageArr[i] ;
+        document.getElementById('userInput').value='' ;
+      }
+    }
+    else{
+      i=0;
+      document.getElementById('tester').innerHTML=passageArr[0] ;
+      this.events.emit( 'battleEnd' );
+    }
+  },
 });
+
+var i = 0;
+var passage = "Type Scene hey what is up buddy"
+var passageArr = passage.split(' ');
 
 var config = {
   type: Phaser.AUTO,
