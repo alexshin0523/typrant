@@ -246,10 +246,40 @@ var HUDScene= new Phaser.Class({
   create: function(){
     var TitleTxt = this.add.text(100,50,'HUD Scene');
     let roamListener = this.scene.get('RoamScene');
+
+
+    var containerWidth = 215;
+    var containerHeight = 5;
+	  var leaderBox = this.add.graphics();
+    leaderBox.fixedToCamera = true;
+    leaderBox.strokeRect(215, 5, 100,100 );
+
+	var style = { font: "13px Press Start 2P", fill: "black", align: "left", fontSize: '22px'};
+
+
+  var nameContainer = this.add.container(215,6);
+  //nameContainer.add(leader_text);
+	//leader_text.anchor.set(0);
+
+	//leaderBox.addChild(leader_text);
+  var origin = 5;
+  var self = this;
     roamListener.events.on('boardInit', function(players){
       console.log('player ids: ');
       Object.keys(players).forEach((id)=>{
         console.log(players[id].playerId);
+
+        origin+= .5;
+        var txt = players[id].playerId;
+        if(txt){
+          userText = self.add.text(10, 10, txt, style);
+          nameContainer.add(userText);
+          userText.setOrigin(origin);
+          // userText.setX(215);
+          // userText.setY(5);
+
+        }
+
         console.log(players[id].username);
       });
     });
