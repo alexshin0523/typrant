@@ -156,7 +156,7 @@ var RoamScene = new Phaser.Class({
 
     this.socket.on('p2pBattle', function( text ){
       console.log(text);
-      self.scene.start( 'TypeScene' );
+      self.scene.launch( 'TypeScene' );
     });
 
     //map things
@@ -188,7 +188,8 @@ var RoamScene = new Phaser.Class({
       self.player.x = Math.floor(Math.random() * 420 ) + 40;
       self.player.y = Math.floor(Math.random() * 420 ) + 40;
       self.socket.emit('playerMovement',{x:self.player.x,y:self.player.y});
-      self.events.emit('closeTypeScene');
+      self.scene.stop( 'TypeScene');
+      //self.events.emit('closeTypeScene');
     });
   },
 
@@ -275,10 +276,12 @@ var TypeScene= new Phaser.Class({
       'Type Scene hey what is up buddy'
     );
     let roamListener = this.scene.get('RoamScene');
+    /*
     roamListener.events.on('closeTypeScene' , function(){
       console.log('type scene');
-      self.scene.start( 'RoamScene' );
+      //self.scene.start( 'RoamScene' );
     });
+    */
   },
 
   update: function(){
