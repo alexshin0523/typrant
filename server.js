@@ -30,25 +30,30 @@ io.on('connection', function(socket){
     mass: 50,
     inBattle: false,
     username: 'I will connect later',
+
     //^^^you might want to make this the socket.id in the mean time
-  };
+    };
 
   //send list of players to new player
   socket.emit('currentPlayers',players);
   //update current players with new player
   socket.broadcast.emit( 'newPlayer' , players[socket.id]);
-  
+
+
+
   //handle if a user leaves the game
   socket.on('disconnect', function(){
     console.log('user disconnect');
     delete players[socket.id];
     io.emit('disconnect',socket.id);
+    socket.emit('refreshBoard');
   });
 
   socket.on('playerMovement', function( movementData){
     players[socket.id].x=movementData.x;
     players[socket.id].y=movementData.y;
     socket.broadcast.emit('playerMoved',players[socket.id]);
+    socket.emit('refreshBoard', players);
   });
 
   socket.on('p2pHit', function( playerId , otherPlayerId ){
