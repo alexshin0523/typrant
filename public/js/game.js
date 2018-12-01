@@ -135,6 +135,17 @@ var RoamScene = new Phaser.Class({
     //durring game player adding
     this.socket.on('newPlayer', (playerInfo)=>{
           addOtherPlayers( self, playerInfo);
+
+
+    });
+
+    this.socket.on('refreshBoard',(players)=>{
+      console.log("refresh");
+
+        self.events.emit('refresh', players);
+
+      console.log("refresh");
+
     });
 
     //remove players
@@ -257,34 +268,85 @@ var HUDScene= new Phaser.Class({
 
 	   var style = { font: "13px Press Start 2P", fill: "black", align: "left", fontSize: '22px'};
 
-
-    var nameContainer = this.add.container(215,6);
+    var lb = [];
+    nameContainer = this.add.container(215,6[lb]);
 
     var x = 0;
     var y = 0;
     var self = this;
+
     roamListener.events.on('boardInit', function(players){
+
+      for(i = 0; i < lb.length; i++){
+        lb.pop();
+      }
       console.log('player ids: ');
+      y = 0;
+
       Object.keys(players).forEach((id)=>{
         console.log(players[id].playerId);
         console.log(players[id].mass);
 
         y += 10;
+
         var txt = players[id].playerId;
         if(txt){
           userText = self.add.text(10, 10, txt, style);
-          nameContainer.add(userText);
+
           userText.setX(x);
           userText.setY(y);
+
+          lb.push(userText);
 
         }
         var mTxt = players[id].mass;
         if(mTxt){
           massText = self.add.text(10, 10, mTxt, style);
-          nameContainer.add(massText);
+
           massText.setX(x + 140);
           massText.setY(y);
+
+          lb.push(massText);
         }
+
+
+        console.log(players[id].username);
+      });
+    });
+    roamListener.events.on('refresh', function(players){
+      for(i = 0; i < lb.length; i++){
+        lb.pop();
+        console.log("popping");
+      }
+      console.log('player ids: ');
+      y = 0;
+
+      Object.keys(players).forEach((id)=>{
+        console.log(players[id].playerId);
+        console.log(players[id].mass);
+
+        y += 10;
+
+        var txt = players[id].playerId;
+        if(txt){
+          userText = self.add.text(10, 10, txt, style);
+
+          userText.setX(x);
+          userText.setY(y);
+
+          lb.push(userText);
+
+        }
+        var mTxt = players[id].mass;
+        if(mTxt){
+          massText = self.add.text(10, 10, mTxt, style);
+
+          massText.setX(x + 140);
+          massText.setY(y);
+
+          lb.push(massText);
+        }
+
 
         console.log(players[id].username);
       });
