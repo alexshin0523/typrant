@@ -443,7 +443,7 @@ var TypeScene= new Phaser.Class({
 
   update: function(){
     if( (i < passageArr.length) ){
-      if( passageArr[i] ==document.getElementById('userInput').value){
+      if( passageArr[i] == document.getElementById('userInput').value){
         ++i;
         document.getElementById('tester').innerHTML=passageArr[i] ;
         document.getElementById('userInput').value='' ;
