@@ -140,14 +140,14 @@ var RoamScene = new Phaser.Class({
 
     });
 
-    this.socket.on('refreshBoard',(players)=>{
-      console.log("refresh");
-
-        self.events.emit('refresh', players);
-
-      console.log("refresh");
-
-    });
+    // this.socket.on('refreshBoard',(players)=>{
+    //   console.log("refresh1");
+    //
+    //     self.events.emit('refresh', players);
+    //
+    //   console.log("refresh2");
+    //
+    // });
 
     //remove players
     this.socket.on('disconnect',(playerId)=>{
@@ -176,7 +176,7 @@ var RoamScene = new Phaser.Class({
       });
     });
 
-    //update mass 
+    //update mass
     this.socket.on('massUpdate', function(playerInfo){
       self.otherPlayers.getChildren().forEach( function(otherPlayer){
         if( playerInfo.playerId === otherPlayer.playerId ){
@@ -207,7 +207,7 @@ var RoamScene = new Phaser.Class({
     battleListener.events.on('battleEnd', function(players){
       console.log('battle end');
       self.socket.emit('playerMovement',{x:self.player.x,y:self.player.y});
-      self.socket.emit( 'typeSceneEnd' , self.socket.id, self.otherId ); 
+      self.socket.emit( 'typeSceneEnd' , self.socket.id, self.otherId );
       self.player.x = Math.floor(Math.random() * 420 ) + 40;
       self.player.y = Math.floor(Math.random() * 420 ) + 40;
       self.scene.stop( 'TypeScene');
@@ -326,7 +326,7 @@ var HUDScene= new Phaser.Class({
     var self = this;
 
     roamListener.events.on('boardInit', function(players){
-for(i = 0; i < lb.length; i++){
+      for(i = 0; i < lb.length; i++){
         lb.pop();
       }
       console.log('player ids: ');
@@ -362,44 +362,46 @@ for(i = 0; i < lb.length; i++){
         console.log(players[id].username);
       });
     });
-    roamListener.events.on('refresh', function(players){
-      for(i = 0; i < lb.length; i++){
-        lb.pop();
-        console.log("popping");
-      }
-      console.log('player ids: ');
-      y = 0;
+  //   roamListener.events.on('refresh', function(players){
+  //     for(i = 0; i < lb.length; i++){
+  //       lb.pop();
+  //       console.log("popping");
+  //     }
+  //     console.log('player ids: ');
+  //     y = 0;
+  //
+  //     Object.keys(players).forEach((id)=>{
+  //       console.log(players[id].playerId);
+  //       console.log(players[id].mass);
+  //
+  //       y += 10;
+  //
+  //       var txt = players[id].playerId;
+  //       if(txt){
+  //         userText = self.add.text(10, 10, txt, style);
+  //
+  //         userText.setX(x);
+  //         userText.setY(y);
+  //
+  //         lb.push(userText);
+  //
+  //       }
+  //       var mTxt = players[id].mass;
+  //       if(mTxt){
+  //         massText = self.add.text(10, 10, mTxt, style);
+  //
+  //         massText.setX(x + 140);
+  //         massText.setY(y);
+  //
+  //         lb.push(massText);
+  //       }
+  //
+  //       console.log(players[id].username);
+  //
+  //   });
+  // });
+  }
 
-      Object.keys(players).forEach((id)=>{
-        console.log(players[id].playerId);
-        console.log(players[id].mass);
-
-        y += 10;
-
-        var txt = players[id].playerId;
-        if(txt){
-          userText = self.add.text(10, 10, txt, style);
-
-          userText.setX(x);
-          userText.setY(y);
-
-          lb.push(userText);
-
-        }
-        var mTxt = players[id].mass;
-        if(mTxt){
-          massText = self.add.text(10, 10, mTxt, style);
-
-          massText.setX(x + 140);
-          massText.setY(y);
-
-          lb.push(massText);
-        }
-
-        console.log(players[id].username);
-     
-    });
-  },
 });
 
 var TypeScene= new Phaser.Class({
@@ -416,13 +418,13 @@ var TypeScene= new Phaser.Class({
   create: function(){
 
 
-   
+
 
     for(i=0; i < 5; i++){
       console.log(generateWords());
     }
 
-  
+
 
     var self = this;
     var TitleTxt = this.add.text(10,100,
@@ -437,7 +439,7 @@ var TypeScene= new Phaser.Class({
      */
 },
 
-  
+
 
   update: function(){
     if( (i < passageArr.length) ){

@@ -40,20 +40,18 @@ io.on('connection', function(socket){
   socket.broadcast.emit( 'newPlayer' , players[socket.id]);
 
 
-
   //handle if a user leaves the game
   socket.on('disconnect', function(){
     console.log('user disconnect');
     delete players[socket.id];
     io.emit('disconnect',socket.id);
-    socket.emit('refreshBoard');
+
   });
 
   socket.on('playerMovement', function( movementData){
     players[socket.id].x=movementData.x;
     players[socket.id].y=movementData.y;
     socket.broadcast.emit('playerMoved',players[socket.id]);
-    socket.emit('refreshBoard', players);
   });
 
   socket.on('p2pHit', function( playerId , otherPlayerId ){
@@ -94,7 +92,7 @@ io.on('connection', function(socket){
     io.emit('massUpdate', players[playerId] );
     io.emit('massUpdate', players[otherPlayerId] );
   });
-    
+
 
 });
 
