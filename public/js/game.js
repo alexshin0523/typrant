@@ -74,7 +74,6 @@ var InstructionScene = new Phaser.Class({
 
   initialize: function InstructionScene(){
     Phaser.Scene.call(this,{key:'InstructionScene'});
-    console.log("1");
   },
 
   preload: function(){
@@ -254,30 +253,35 @@ var HUDScene= new Phaser.Class({
     leaderBox.fixedToCamera = true;
     leaderBox.strokeRect(215, 5, 100,100 );
 
-	var style = { font: "13px Press Start 2P", fill: "black", align: "left", fontSize: '22px'};
+	   var style = { font: "13px Press Start 2P", fill: "black", align: "left", fontSize: '22px'};
 
 
-  var nameContainer = this.add.container(215,6);
-  //nameContainer.add(leader_text);
-	//leader_text.anchor.set(0);
+    var nameContainer = this.add.container(215,6);
 
-	//leaderBox.addChild(leader_text);
-  var origin = 5;
-  var self = this;
+    var x = 0;
+    var y = 0;
+    var self = this;
     roamListener.events.on('boardInit', function(players){
       console.log('player ids: ');
       Object.keys(players).forEach((id)=>{
         console.log(players[id].playerId);
+        console.log(players[id].mass);
 
-        origin+= .5;
+        y += 10;
         var txt = players[id].playerId;
         if(txt){
           userText = self.add.text(10, 10, txt, style);
           nameContainer.add(userText);
-          userText.setOrigin(origin);
-          // userText.setX(215);
-          // userText.setY(5);
+          userText.setX(x);
+          userText.setY(y);
 
+        }
+        var mTxt = players[id].mass;
+        if(mTxt){
+          massText = self.add.text(10, 10, mTxt, style);
+          nameContainer.add(massText);
+          massText.setX(x + 140);
+          massText.setY(y);
         }
 
         console.log(players[id].username);
@@ -301,8 +305,8 @@ var TypeScene= new Phaser.Class({
 var config = {
   type: Phaser.AUTO,
   parent: 'content',
-  width: 320,
-  height: 240,
+  width: 640,
+  height: 480,
   zoom: 2,
   pixelArt: true,
   physics: {
