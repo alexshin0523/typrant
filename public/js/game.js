@@ -34,7 +34,7 @@ var MenuScene = new Phaser.Class({
     var TitleTxt = this.add.text(120,10,'Menu Scene',style);
     var InstructionTxt = this.add.text(120,75,'Instructions',style);
     var InputTxt = this.add.text(120,125,'Enter Username',style);
-    var AdvanceTxt = this.add.text(120,175,'Advance',style);
+    var AdvanceTxt = this.add.text(120,175,'Play',style);
 
     AdvanceTxt.setInteractive();
     AdvanceTxt.on(
@@ -122,6 +122,7 @@ var RoamScene = new Phaser.Class({
           self.player.setCollideWorldBounds(true);
           self.cameras.main.startFollow(self.player);
           self.player.mass = players[id].mass;
+          self.player.inBattle = players[id].inBattle;
         }
         else{ //add others
           addOtherPlayers( self, players[id]);
@@ -154,9 +155,35 @@ var RoamScene = new Phaser.Class({
       });
     });
 
-    this.socket.on('p2pBattle', function( text ){
-      console.log(text);
+    //update battle status
+    this.socket.on('playerBattle', function(playerInfo){
+      self.otherPlayers.getChildren().forEach( function(otherPlayer){
+        if( playerInfo.playerId === otherPlayer.playerId ){
+          otherPlayer.inBattle = playerInfo.inBattle ;
+        }
+      });
+    });
+
+    this.socket.on('p2pBattle', function( otherId ){
+      console.log(otherId);
       self.scene.launch( 'TypeScene' );
+      self.otherId = otherId ;
+    });
+
+    this.socket.on('lose',function(){
+      console.log( self.player.mass );
+      self.scene.stop('TypeScene');
+    });
+
+    let battleListener = this.scene.get('TypeScene');
+    battleListener.events.on('battleEnd', function(players){
+      console.log('battle end');
+      self.socket.emit('playerMovement',{x:self.player.x,y:self.player.y});
+      self.socket.emit( 'typeSceneEnd' , self.socket.id, self.otherId ); 
+      self.player.x = Math.floor(Math.random() * 420 ) + 40;
+      self.player.y = Math.floor(Math.random() * 420 ) + 40;
+      self.scene.stop( 'TypeScene');
+      //self.events.emit('closeTypeScene');
     });
 
     //map things
@@ -176,25 +203,19 @@ var RoamScene = new Phaser.Class({
     this.cursors = this.input.keyboard.createCursorKeys();
 
     //colision things
-   this.physics.add.collider(this.player,obstacles);
+    this.physics.add.collider(this.player,obstacles);
     this.physics.add.overlap(this.player,this.otherPlayers, this.p2p ,null,this);
 
     //HUDScene Launch
     this.scene.launch('HUDScene');
 
-    let battleListener = this.scene.get('TypeScene');
-    battleListener.events.on('battleEnd', function(players){
-      console.log('battle end');
-      self.player.x = Math.floor(Math.random() * 420 ) + 40;
-      self.player.y = Math.floor(Math.random() * 420 ) + 40;
-      self.socket.emit('playerMovement',{x:self.player.x,y:self.player.y});
-      self.scene.stop( 'TypeScene');
-      //self.events.emit('closeTypeScene');
-    });
+
   },
 
   p2p : function( player , otherPlayer ){
-    this.socket.emit( 'p2pHit', this.socket.id , otherPlayer.playerId);
+    if( !this.player.inBattle && !otherPlayer.inBattle ){
+      this.socket.emit( 'p2pHit', this.socket.id , otherPlayer.playerId);
+    }
   },
 
   update: function (time, delta){
@@ -238,6 +259,7 @@ function addOtherPlayers(self, playerInfo){
   const otherPlayer = self.physics.add.sprite( playerInfo.x , playerInfo.y ,'player', 3);
   otherPlayer.playerId = playerInfo.playerId;
   otherPlayer.mass = playerInfo.mass;
+  otherPlayer.inBattle = playerInfo.inBattle;
   self.otherPlayers.add(otherPlayer);
 }
 
@@ -272,17 +294,17 @@ var TypeScene= new Phaser.Class({
 
   create: function(){
     var self = this;
-    var TitleTxt = this.add.text(100,50,
+    var TitleTxt = this.add.text(10,100,
       'Type Scene hey what is up buddy'
     );
     let roamListener = this.scene.get('RoamScene');
     /*
     roamListener.events.on('closeTypeScene' , function(){
       console.log('type scene');
-      //self.scene.start( 'RoamScene' );
+//self.scene.start( 'RoamScene' );
     });
-    */
-  },
+     */
+},
 
   update: function(){
     if( (i < passageArr.length) ){

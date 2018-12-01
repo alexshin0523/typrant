@@ -28,6 +28,7 @@ io.on('connection', function(socket){
     */
     playerId: socket.id,
     mass: 50,
+    inBattle: false,
     username: 'I will connect later',
     //^^^you might want to make this the socket.id in the mean time
   };
@@ -51,11 +52,24 @@ io.on('connection', function(socket){
   });
 
   socket.on('p2pHit', function( playerId , otherPlayerId ){
-    let text = "we fighting";
-    socket.broadcast.to(otherPlayerId).emit('p2pBattle', text );
-    socket.emit( 'p2pBattle',text);
+    socket.broadcast.to(otherPlayerId).emit('p2pBattle', playerId );
+    socket.emit( 'p2pBattle', otherPlayerId);
   });
 
+  socket.on('typeSceneEnd', function( playerId , otherId ){
+    socket.broadcast.to(otherId).emit('lose' );
+    /*
+    let loserMass = players[otherId].mass;
+    let winnerMass = players[playerId].mass;
+    winnerMass += loserMass;
+    loserMass -= players[playerId].mass;
+
+    socket.emit('massUpdate',  );
+
+    socket.broadcast.to(otherId).emit('massUpdate',  );
+    */
+  });
+    
 
 });
 
