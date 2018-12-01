@@ -164,6 +164,16 @@ var RoamScene = new Phaser.Class({
       });
     });
 
+    //update mass 
+    this.socket.on('massUpdate', function(playerInfo){
+      self.otherPlayers.getChildren().forEach( function(otherPlayer){
+        if( playerInfo.playerId === otherPlayer.playerId ){
+          otherPlayer.mass= playerInfo.mass;
+        }
+        console.log(playerInfo.playerId , playerInfo.mass);
+      });
+    });
+
     this.socket.on('p2pBattle', function( otherId ){
       console.log(otherId);
       self.player.inBattle = true;
@@ -219,7 +229,7 @@ var RoamScene = new Phaser.Class({
   },
 
   p2p : function( player , otherPlayer ){
-    if( !this.player.inBattle && !otherPlayer.inBattle ){
+    if( !this.player.inBattle && !otherPlayer.inBattle && otherPlayer.playerId != this.otherId ){
       console.log( this.player.inBattle);
       console.log( otherPlayer.inBattle);
       this.socket.emit( 'p2pHit', this.socket.id , otherPlayer.playerId);

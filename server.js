@@ -55,6 +55,7 @@ io.on('connection', function(socket){
     players[playerId].inBattle = true;
     players[otherPlayerId].inBattle = true;
     socket.broadcast.emit('playerBattle',players[socket.id]);
+    //change to io.emit
     socket.broadcast.emit('playerBattle',players[otherPlayerId]);
     socket.broadcast.to(otherPlayerId).emit('p2pBattle', playerId );
     socket.emit( 'p2pBattle', otherPlayerId);
@@ -71,16 +72,22 @@ io.on('connection', function(socket){
     socket.broadcast.to(otherPlayerId).emit('battleOutCome' );
     socket.emit( 'battleOutCome' );
 
-    /*
-    let loserMass = players[otherId].mass;
+    let loserMass = players[otherPlayerId].mass;
     let winnerMass = players[playerId].mass;
-    winnerMass += loserMass;
-    loserMass -= players[playerId].mass;
+    if( loserMass > winnerMass ){
+      loserMass -= winnerMass;
+      winnerMass += winnerMass;
+    }
+    else{
+      winnerMass += loserMass ;
+      loserMass = 1;
+    }
 
-    socket.emit('massUpdate',  );
+    players[playerId].mass= winnerMass;
+    players[otherPlayerId].mass= loserMass;
 
-    socket.broadcast.to(otherId).emit('massUpdate',  );
-    */
+    io.emit('massUpdate', players[playerId] );
+    io.emit('massUpdate', players[otherPlayerId] );
   });
     
 
