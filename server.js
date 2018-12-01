@@ -52,12 +52,25 @@ io.on('connection', function(socket){
   });
 
   socket.on('p2pHit', function( playerId , otherPlayerId ){
+    players[playerId].inBattle = true;
+    players[otherPlayerId].inBattle = true;
+    socket.broadcast.emit('playerBattle',players[socket.id]);
+    socket.broadcast.emit('playerBattle',players[otherPlayerId]);
     socket.broadcast.to(otherPlayerId).emit('p2pBattle', playerId );
     socket.emit( 'p2pBattle', otherPlayerId);
   });
 
-  socket.on('typeSceneEnd', function( playerId , otherId ){
-    socket.broadcast.to(otherId).emit('lose' );
+  socket.on('typeSceneEnd', function( playerId , otherPlayerId ){
+    socket.broadcast.to(otherPlayerId).emit('lose' );
+    players[playerId].inBattle = false;
+    players[otherPlayerId].inBattle = false;
+    socket.broadcast.emit('playerBattle',players[socket.id]);
+    io.emit('playerBattle',players[otherPlayerId]);
+
+    //include mass after
+    socket.broadcast.to(otherPlayerId).emit('battleOutCome' );
+    socket.emit( 'battleOutCome' );
+
     /*
     let loserMass = players[otherId].mass;
     let winnerMass = players[playerId].mass;
