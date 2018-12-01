@@ -28,6 +28,7 @@ io.on('connection', function(socket){
     */
     playerId: socket.id,
     mass: 50,
+    inBattle: false,
     username: 'I will connect later',
 
     //^^^you might want to make this the socket.id in the mean time
@@ -56,10 +57,44 @@ io.on('connection', function(socket){
   });
 
   socket.on('p2pHit', function( playerId , otherPlayerId ){
-    let text = "we fighting";
-    socket.broadcast.to(otherPlayerId).emit('p2pBattle', text );
-    socket.emit( 'p2pBattle',text);
+    players[playerId].inBattle = true;
+    players[otherPlayerId].inBattle = true;
+    socket.broadcast.emit('playerBattle',players[socket.id]);
+    //change to io.emit
+    socket.broadcast.emit('playerBattle',players[otherPlayerId]);
+    socket.broadcast.to(otherPlayerId).emit('p2pBattle', playerId );
+    socket.emit( 'p2pBattle', otherPlayerId);
   });
+
+  socket.on('typeSceneEnd', function( playerId , otherPlayerId ){
+    socket.broadcast.to(otherPlayerId).emit('lose' );
+    players[playerId].inBattle = false;
+    players[otherPlayerId].inBattle = false;
+    socket.broadcast.emit('playerBattle',players[socket.id]);
+    io.emit('playerBattle',players[otherPlayerId]);
+
+    //include mass after
+    socket.broadcast.to(otherPlayerId).emit('battleOutCome' );
+    socket.emit( 'battleOutCome' );
+
+    let loserMass = players[otherPlayerId].mass;
+    let winnerMass = players[playerId].mass;
+    if( loserMass > winnerMass ){
+      loserMass -= winnerMass;
+      winnerMass += winnerMass;
+    }
+    else{
+      winnerMass += loserMass ;
+      loserMass = 1;
+    }
+
+    players[playerId].mass= winnerMass;
+    players[otherPlayerId].mass= loserMass;
+
+    io.emit('massUpdate', players[playerId] );
+    io.emit('massUpdate', players[otherPlayerId] );
+  });
+    
 
 });
 

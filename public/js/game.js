@@ -35,7 +35,7 @@ var MenuScene = new Phaser.Class({
     var TitleTxt = this.add.text(120,10,'Menu Scene',style);
     var InstructionTxt = this.add.text(120,75,'Instructions',style);
     var InputTxt = this.add.text(120,125,'Enter Username',style);
-    var AdvanceTxt = this.add.text(120,175,'Advance',style);
+    var AdvanceTxt = this.add.text(120,175,'Play',style);
 
     AdvanceTxt.setInteractive();
     AdvanceTxt.on(
@@ -123,6 +123,7 @@ var RoamScene = new Phaser.Class({
           self.player.setCollideWorldBounds(true);
           self.cameras.main.startFollow(self.player);
           self.player.mass = players[id].mass;
+          self.player.inBattle = players[id].inBattle;
         }
         else{ //add others
           addOtherPlayers( self, players[id]);
@@ -166,9 +167,51 @@ var RoamScene = new Phaser.Class({
       });
     });
 
-    this.socket.on('p2pBattle', function( text ){
-      console.log(text);
-      self.scene.start( 'TypeScene' );
+    //update battle status
+    this.socket.on('playerBattle', function(playerInfo){
+      self.otherPlayers.getChildren().forEach( function(otherPlayer){
+        if( playerInfo.playerId === otherPlayer.playerId ){
+          otherPlayer.inBattle = playerInfo.inBattle ;
+        }
+      });
+    });
+
+    //update mass 
+    this.socket.on('massUpdate', function(playerInfo){
+      self.otherPlayers.getChildren().forEach( function(otherPlayer){
+        if( playerInfo.playerId === otherPlayer.playerId ){
+          otherPlayer.mass= playerInfo.mass;
+        }
+        console.log(playerInfo.playerId , playerInfo.mass);
+      });
+    });
+
+    this.socket.on('p2pBattle', function( otherId ){
+      console.log(otherId);
+      self.player.inBattle = true;
+      self.scene.launch( 'TypeScene' );
+      self.otherId = otherId ;
+    });
+
+    this.socket.on('lose',function(){
+      console.log( self.player.mass );
+      self.scene.stop('TypeScene');
+    });
+
+    //include mass
+    this.socket.on('battleOutCome',function(){
+      self.player.inBattle = false ;
+    });
+
+    let battleListener = this.scene.get('TypeScene');
+    battleListener.events.on('battleEnd', function(players){
+      console.log('battle end');
+      self.socket.emit('playerMovement',{x:self.player.x,y:self.player.y});
+      self.socket.emit( 'typeSceneEnd' , self.socket.id, self.otherId ); 
+      self.player.x = Math.floor(Math.random() * 420 ) + 40;
+      self.player.y = Math.floor(Math.random() * 420 ) + 40;
+      self.scene.stop( 'TypeScene');
+      //self.events.emit('closeTypeScene');
     });
 
     //map things
@@ -188,15 +231,21 @@ var RoamScene = new Phaser.Class({
     this.cursors = this.input.keyboard.createCursorKeys();
 
     //colision things
-   this.physics.add.collider(this.player,obstacles);
+    this.physics.add.collider(this.player,obstacles);
     this.physics.add.overlap(this.player,this.otherPlayers, this.p2p ,null,this);
 
     //HUDScene Launch
     this.scene.launch('HUDScene');
+
+
   },
 
   p2p : function( player , otherPlayer ){
-    this.socket.emit( 'p2pHit', this.socket.id , otherPlayer.playerId);
+    if( !this.player.inBattle && !otherPlayer.inBattle && otherPlayer.playerId != this.otherId ){
+      console.log( this.player.inBattle);
+      console.log( otherPlayer.inBattle);
+      this.socket.emit( 'p2pHit', this.socket.id , otherPlayer.playerId);
+    }
   },
 
   update: function (time, delta){
@@ -240,6 +289,7 @@ function addOtherPlayers(self, playerInfo){
   const otherPlayer = self.physics.add.sprite( playerInfo.x , playerInfo.y ,'player', 3);
   otherPlayer.playerId = playerInfo.playerId;
   otherPlayer.mass = playerInfo.mass;
+  otherPlayer.inBattle = playerInfo.inBattle;
   self.otherPlayers.add(otherPlayer);
 }
 
@@ -276,8 +326,7 @@ var HUDScene= new Phaser.Class({
     var self = this;
 
     roamListener.events.on('boardInit', function(players){
-
-      for(i = 0; i < lb.length; i++){
+for(i = 0; i < lb.length; i++){
         lb.pop();
       }
       console.log('player ids: ');
@@ -347,9 +396,8 @@ var HUDScene= new Phaser.Class({
           lb.push(massText);
         }
 
-
         console.log(players[id].username);
-      });
+     
     });
   },
 });
@@ -367,14 +415,49 @@ var TypeScene= new Phaser.Class({
 
   create: function(){
 
-    var TitleTxt = this.add.text(100,50,'Type Scene');
+
+   
 
     for(i=0; i < 5; i++){
       console.log(generateWords());
     }
 
-  }
+  
+
+    var self = this;
+    var TitleTxt = this.add.text(10,100,
+      'Type Scene hey what is up buddy'
+    );
+    let roamListener = this.scene.get('RoamScene');
+    /*
+    roamListener.events.on('closeTypeScene' , function(){
+      console.log('type scene');
+//self.scene.start( 'RoamScene' );
+    });
+     */
+},
+
+  
+
+  update: function(){
+    if( (i < passageArr.length) ){
+      if( passageArr[i] ==document.getElementById('userInput').value){
+        ++i;
+        document.getElementById('tester').innerHTML=passageArr[i] ;
+        document.getElementById('userInput').value='' ;
+      }
+    }
+    else{
+      i=0;
+      document.getElementById('tester').innerHTML=passageArr[0] ;
+      this.events.emit( 'battleEnd' );
+    }
+  },
 });
+
+var i = 0;
+var passage = "Type Scene hey what is up buddy"
+var passageArr = passage.split(' ');
 
 var config = {
   type: Phaser.AUTO,
