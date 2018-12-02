@@ -340,7 +340,7 @@ var HUDScene= new Phaser.Class({
 
         var txt = players[id].playerId;
         if(txt){
-          userText = self.add.text(10, 10, txt, style);
+          userText = self.add.text(50, 50, txt, style);
 
           userText.setX(x);
           userText.setY(y);
@@ -420,9 +420,9 @@ var TypeScene= new Phaser.Class({
 
 
 
-    for(j=0; j < 5; j++){
-      console.log(generateWords());
-    }
+    // for(j=0; j < 5; j++){
+    //   console.log(generateWords());
+    // }
 
 
 
@@ -430,6 +430,7 @@ var TypeScene= new Phaser.Class({
     var TitleTxt = this.add.text(10,100,
       'Type Scene hey what is up buddy'
     );
+
     let roamListener = this.scene.get('RoamScene');
     /*
     roamListener.events.on('closeTypeScene' , function(){
@@ -437,35 +438,62 @@ var TypeScene= new Phaser.Class({
 //self.scene.start( 'RoamScene' );
     });
      */
+    passageArr = [];
+     for(i = 0; i < 5; i++){
+       passageArr.push(generateWords());
+     }
 },
 
 
 
   update: function(){
-    if( (i < passageArr.length) ){
-      if( passageArr[i] == document.getElementById('userInput').value){
-        ++i;
-        document.getElementById('tester').innerHTML=passageArr[i] ;
+
+    // var passage = "Type Scene hey what is up buddy"
+    // var passageArr = passage.split(' ');
+    // var passageArr = [];
+    // for(i = 0; i < 5; i++){
+    //   passageArr.push(generateWords());
+    // }
+
+    console.log(passageArr.length);
+
+    console.log("1");
+    if( (q < passageArr.length) ){
+      console.log("2");
+      console.log(passageArr[q]);
+      document.getElementById('tester').innerHTML=passageArr[q] ;
+
+      if( passageArr[q] == document.getElementById('userInput').value){
+        console.log("3");
+        ++q;
+        document.getElementById('tester').innerHTML=passageArr[q] ;
         document.getElementById('userInput').value='' ;
+        console.log("4");
       }
+      else{
+        document.getElementById('tester').innerHTML=passageArr[q] ;
+
+      }
+
     }
     else{
-      i=0;
+      q=0;
       document.getElementById('tester').innerHTML=passageArr[0] ;
       this.events.emit( 'battleEnd' );
+      console.log("5");
     }
   },
 });
 
-var i = 0;
-var passage = "Type Scene hey what is up buddy"
-var passageArr = passage.split(' ');
+var q = 0;
+// var passage = "Type Scene hey what is up buddy"
+// var passageArr = passage.split(' ');
 
 var config = {
   type: Phaser.AUTO,
   parent: 'content',
-  width: 640,
-  height: 480,
+  width: 360,
+  height: 240,
   zoom: 2,
   pixelArt: true,
   physics: {
