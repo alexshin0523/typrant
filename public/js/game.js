@@ -5,7 +5,9 @@ var BootScene = new Phaser.Class({
   Extends: Phaser.Scene,
 
   initialize: function BootScene(){
+
     Phaser.Scene.call(this,{key:'BootScene'});
+
   },
 
   preload: function(){
@@ -15,9 +17,11 @@ var BootScene = new Phaser.Class({
     this.load.image('tiles', 'assets/map/spritesheet.png');
     this.load.tilemapTiledJSON('map', 'assets/map/map.json');
 
+
   },
 
   create: function(){
+
     this.scene.start('MenuScene');
   },
 });
@@ -31,6 +35,8 @@ var MenuScene = new Phaser.Class({
   },
 
   create: function(){
+    document.getElementById("promptBox").style.visibility = "hidden";
+
     var style = { font: "12px Arial", fill: "#ffffff", align: "center" };
     var TitleTxt = this.add.text(120,10,'Menu Scene',style);
     var InstructionTxt = this.add.text(120,75,'Instructions',style);
@@ -439,6 +445,8 @@ var TypeScene= new Phaser.Class({
 
 
   update: function(){
+    document.getElementById("promptBox").style.visibility = "visible";
+
 
     if( (q < passageArr.length) ){
       console.log(passageArr[q]);
@@ -446,10 +454,12 @@ var TypeScene= new Phaser.Class({
 
       if( passageArr[q] == document.getElementById('userInput').value){
         ++q;
+
         document.getElementById('tester').innerHTML=passageArr[q] ;
         document.getElementById('userInput').value='' ;
       }
       else{
+
         document.getElementById('tester').innerHTML=passageArr[q] ;
 
       }
@@ -457,7 +467,7 @@ var TypeScene= new Phaser.Class({
     }
     else{
       q=0;
-      document.getElementById('tester').innerHTML="" ;
+      document.getElementById('tester').innerHTML=" " ;
       this.events.emit( 'battleEnd' );
     }
   },

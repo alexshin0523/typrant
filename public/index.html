@@ -3,19 +3,59 @@
 
     <head>
         <meta charset="utf-8">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="main.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
+  </head>
 
-    <body>
-        <p id="outPut"></p>
-        <p id="tester"></p>
-        <input type="text" id="userInput" name="carrot">
-        <!--<input type="text" id="userInput" name="carrot" >-->
+<body class="text-center">
+<div id="my-game"></div>
+  <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header class="masthead mb-auto">
+      <div class="inner">
+        <h3 class="masthead-brand">Typrant</h3>
+        <nav class="nav nav-masthead justify-content-center">
+          <a class="nav-link active" href="#">Home</a>
+          <a class="nav-link" href="#">Teacher</a>
+          <a class="nav-link" href="#">Player</a>
+        </nav>
+      </div>
+    </header>
+
+    <main role="main" class="inner cover" id = "content">
+      <div class="card text-white bg-dark mb-3" id = "promptBox">
+        <div class="card-body">
+          <h5 class="card-title">Enter the prompt</h5>
+          <p class="lead" id = "tester">Prompt will appear here</p>
+        </div>
+      </div>
+
+
+      <p class="lead" id = "tester"></p>
+    </main>
+    <div class = "form-group row">
+      <!-- <div class="col-xs-2"> -->
+      <input class="form-control" type="text" placeholder="Enter prompt" id="userInput" name="carrot">
+      <!-- </div> -->
+    </div>
+    <footer class="mastfoot mt-auto">
+      <div class="inner">
+        <!-- <p>Cover template for <a href="https://getbootstrap.com/">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p> -->
+      </div>
+    </footer>
+  </div>
+  <script>
+    document.getElementById("promptBox").style.visibility = "hidden";
+  </script>
+
+
         <script src="//cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser.js"></script>
         <script src="//cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script src="js/game.js"></script>
-    <script>
-    </script>
-    </body>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
 </html>
