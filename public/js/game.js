@@ -446,10 +446,12 @@ var TypeScene= new Phaser.Class({
 
       if( passageArr[q] == document.getElementById('userInput').value){
         ++q;
+
         document.getElementById('tester').innerHTML=passageArr[q] ;
         document.getElementById('userInput').value='' ;
       }
       else{
+
         document.getElementById('tester').innerHTML=passageArr[q] ;
 
       }
@@ -457,7 +459,7 @@ var TypeScene= new Phaser.Class({
     }
     else{
       q=0;
-      document.getElementById('tester').innerHTML="" ;
+      document.getElementById('tester').innerHTML=" " ;
       this.events.emit( 'battleEnd' );
     }
   },
