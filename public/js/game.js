@@ -140,9 +140,16 @@ var RoamScene = new Phaser.Class({
 
     //durring game player adding
     this.socket.on('newPlayer', (playerInfo)=>{
-          addOtherPlayers( self, playerInfo);
-
-
+      addOtherPlayers( self, playerInfo);
+        //parth 
+        //parth 
+        //parth 
+      let players = [];
+      players[0]=playerInfo;
+      self.events.emit('boardInit', players);
+        //parth 
+        //parth 
+        //parth 
     });
 
     //remove players
@@ -178,7 +185,15 @@ var RoamScene = new Phaser.Class({
         if( playerInfo.playerId === otherPlayer.playerId ){
           otherPlayer.mass= playerInfo.mass;
         }
-        console.log(playerInfo.playerId , playerInfo.mass);
+        //parth 
+        //parth 
+        //parth 
+        let players = [];
+        players[0]=playerInfo;
+        self.events.emit('boardInit', players);
+        //parth 
+        //parth 
+        //parth 
       });
     });
 
