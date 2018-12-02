@@ -469,6 +469,8 @@ var TypeScene= new Phaser.Class({
       q=0;
       document.getElementById('tester').innerHTML=" " ;
       this.events.emit( 'battleEnd' );
+      document.getElementById("promptBox").style.visibility = "hidden";
+
     }
   },
 });
