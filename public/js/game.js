@@ -418,14 +418,6 @@ var TypeScene= new Phaser.Class({
   create: function(){
 
 
-
-
-    // for(j=0; j < 5; j++){
-    //   console.log(generateWords());
-    // }
-
-
-
     var self = this;
     var TitleTxt = this.add.text(10,100,
       'Type Scene hey what is up buddy'
@@ -448,27 +440,14 @@ var TypeScene= new Phaser.Class({
 
   update: function(){
 
-    // var passage = "Type Scene hey what is up buddy"
-    // var passageArr = passage.split(' ');
-    // var passageArr = [];
-    // for(i = 0; i < 5; i++){
-    //   passageArr.push(generateWords());
-    // }
-
-    console.log(passageArr.length);
-
-    console.log("1");
     if( (q < passageArr.length) ){
-      console.log("2");
       console.log(passageArr[q]);
       document.getElementById('tester').innerHTML=passageArr[q] ;
 
       if( passageArr[q] == document.getElementById('userInput').value){
-        console.log("3");
         ++q;
         document.getElementById('tester').innerHTML=passageArr[q] ;
         document.getElementById('userInput').value='' ;
-        console.log("4");
       }
       else{
         document.getElementById('tester').innerHTML=passageArr[q] ;
@@ -480,7 +459,6 @@ var TypeScene= new Phaser.Class({
       q=0;
       document.getElementById('tester').innerHTML=passageArr[0] ;
       this.events.emit( 'battleEnd' );
-      console.log("5");
     }
   },
 });
