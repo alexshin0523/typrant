@@ -191,6 +191,9 @@ var RoamScene = new Phaser.Class({
 
     this.socket.on('lose',function(){
       console.log( self.player.mass );
+      q=0;
+      document.getElementById('tester').innerHTML=" " ;
+      document.getElementById("promptBox").style.visibility = "hidden";
       self.scene.stop('TypeScene');
     });
 
