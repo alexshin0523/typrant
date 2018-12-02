@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+<<<<<<< HEAD
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
+        <style>
+            html {
+              height: 100%;
+              width: 100%;
+              overflow: auto;
+              position: fixed;
+              top:0;
+              bottom:0;
+              left:0;
+              right:0;
+            }
+            body {
+                height: 99%;
+                width: 86%;
+                align: center;
+                padding-left: 7%;
+                padding-right: 7%;
+                padding-top: 3%;
+                padding-bottom: 0;
+                margin: 0;
+                /* margin-left: 5%;
+                margin-right:5%; */
+                border-radius: 0;
+                background-color: lightgray;
+                overflow: auto;
+            }
+
+            header {
+              padding-top: 5px;
+              padding-bottom: 5px;
+              background-color: #262B90;
+              color: white;
+              font-family: Verdana;
+              font-size: 30px;
+            }
+
+            .sign-in {
+              width: 100px;
+              height: 30px;
+              font-size: 18px;
+            }
+
+            .hero-image {
+                background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("assets/banner.jpg");
+                height: 50%;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                position: relative;
+            }
+
+            .hero-text {
+                text-align: center;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: white;
+                font-size: 30px;
+                font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+            }
+
+            .A {
+              border: 1px;
+              background-color: #9DE2EB;
+            }
+
+            div.logo {
+              align-self: left;
+              margin: 10px;
+              padding: 0;
+
+            }
+
+            td.headings {
+              text-align: right;
+              padding-right: 20px;
+              padding-left: 5px;
+              margin: 5px;
+              width: 10%;
+              font-size: 21px;
+
+            }
+
+            td.headings2 {
+              padding-left: 2%;
+              text-align: left;
+              width: 57%;
+            }
+
+            tr.headings {
+              width: 100%;
+              padding-right: 20px;
+            }
+
+            #content {
+              width: 100%;
+              text-align: center;
+            }
+
+            .textbox {
+              padding: 10px;
+              background-color: #262B90;
+              font-family: Verdana;
+              color: white;
+              width: 250px;
+              margin: auto;
+              text-align: center;
+            }
+        </style>
+=======
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="main.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+>>>>>>> e15ea7b07124d8cac826df7d87b3c865232fc08b
+    </head>
+  </head>
+
+<<<<<<< HEAD
+    <body>
+        <header>
+            <table class="logo">
+                <tr class = "headings">
+                    <td class="headings2">
+                        <h3><i>Typrant.com</i></h3>
+                    </td>
+                    <td>
+                    <td class="headings">Home</td>
+                    <td class="headings">Games</td>
+                    <td class="headings">About Us</td>
+                    <td class="headings"><button class="sign-in">Sign-In</button></td>
+                </tr>
+            </table>
+        </header>
+
+        <div class="hero-image">
+          <div class="hero-text">
+            <h1>Typrant</h1>
+            <h3>"Bring Your Ideas into the World"</h3>
+          </div>
+        </div>
+
+        <div class="A">
+            <br><br>
+            <div id="content" class="screen"></div>
+
+            <div class="textbox">
+              Input: <input type="text" id="userInput" name="carrot" onchange="ff();">
+            </div>
+            <!--<input type="text" id="userInput" name="carrot" >-->
+            <script src="//cdn.jsdelivr.net/npm/phaser@3.0.0/dist/phaser.min.js"></script>
+            <script src="/socket.io/socket.io.js"></script>
+            <script src="js/game.js"></script>
+            <script>
+            </script>
+
+            <br><br><br><br><br><br>
+        </div>
+    </body>
+=======
+<body class="text-center">
+<div id="my-game"></div>
+  <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header class="masthead mb-auto">
+      <div class="inner">
+        <h3 class="masthead-brand">Typrant</h3>
+        <nav class="nav nav-masthead justify-content-center">
+          <a class="nav-link active" href="#">Home</a>
+          <a class="nav-link" href="#">Teacher</a>
+          <a class="nav-link" href="#">Player</a>
+        </nav>
+      </div>
+    </header>
+
+    <main role="main" class="inner cover" id = "content">
+      <div class="card text-white bg-dark mb-3" id = "promptBox">
+        <div class="card-body">
+          <h5 class="card-title">Enter the prompt</h5>
+          <p class="lead" id = "tester">Prompt will appear here</p>
+        </div>
+      </div>
+
+
+      <p class="lead" id = "tester"></p>
+    </main>
+    <div class = "form-group row">
+      <!-- <div class="col-xs-2"> -->
+      <input class="form-control" type="text" placeholder="Enter prompt" id="userInput" name="carrot">
+      <!-- </div> -->
+    </div>
+    <footer class="mastfoot mt-auto">
+      <div class="inner">
+        <!-- <p>Cover template for <a href="https://getbootstrap.com/">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p> -->
+      </div>
+    </footer>
+  </div>
+  <script>
+    document.getElementById("promptBox").style.visibility = "hidden";
+  </script>
+
+
+        <script src="//cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser.js"></script>
+        <script src="//cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="js/game.js"></script>
+>>>>>>> e15ea7b07124d8cac826df7d87b3c865232fc08b
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+</html>
