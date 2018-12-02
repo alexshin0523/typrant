@@ -457,7 +457,7 @@ var TypeScene= new Phaser.Class({
     }
     else{
       q=0;
-      document.getElementById('tester').innerHTML=passageArr[0] ;
+      document.getElementById('tester').innerHTML="" ;
       this.events.emit( 'battleEnd' );
     }
   },
