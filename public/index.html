@@ -12,7 +12,6 @@
 <body class="text-center">
 <div id="my-game"></div>
   <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-
     <header class="masthead mb-auto">
       <div class="inner">
         <h3 class="masthead-brand">Typrant</h3>
@@ -25,17 +24,15 @@
     </header>
 
     <main role="main" class="inner cover" id = "content">
-      <h1 class="cover-heading"></h1>
+      <div class="card text-white bg-dark mb-3" id = "promptBox">
+        <div class="card-body">
+          <h5 class="card-title">Enter the prompt</h5>
+          <p class="lead" id = "tester">Prompt will appear here</p>
+        </div>
+      </div>
+
+
       <p class="lead" id = "tester"></p>
-      <!-- <p class="lead">
-        <a href="#" class="btn btn-lg btn-secondary">Learn more</a>
-      </p> -->
-      <p id="outPut"></p>
-      <p id="tester"></p>
-
-
-      <!-- <input type="text" id="userInput" name="carrot"> -->
-
     </main>
     <div class = "form-group row">
       <!-- <div class="col-xs-2"> -->
@@ -48,11 +45,11 @@
       </div>
     </footer>
   </div>
+  <script>
+    document.getElementById("promptBox").style.visibility = "hidden";
+  </script>
 
-        <p id="outPut"></p>
-        <p id="tester"></p>
-        <input type="text" id="userInput" name="carrot">
-        <!--<input type="text" id="userInput" name="carrot" >-->
+
         <script src="//cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser.js"></script>
         <script src="//cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
