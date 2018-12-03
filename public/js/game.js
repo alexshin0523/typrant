@@ -1,11 +1,12 @@
 var name = "Anonymous";
-
+var playersList = [];
 
 var BootScene = new Phaser.Class({
   Extends: Phaser.Scene,
 
   initialize: function BootScene(){
-
+    App42.initialize("7ca44b1e251629507e13add0f304381d2fde6139b541b15d2e6b4c0f9cff5f5c","e924e9e4a8aebfb33eaee371157a61d95d067b0fc26fa42a49bb4244dee2ead0");
+    scoreBoardService = new App42ScoreBoard()
     Phaser.Scene.call(this,{key:'BootScene'});
 
   },
@@ -123,6 +124,21 @@ var RoamScene = new Phaser.Class({
     this.socket.on('currentPlayers',function(players){
       Object.keys(players).forEach((id)=>{
         //add self
+    //     if(players[id].playerId && players[id].mass){
+    //       scoreBoardService.saveUserScore("Typrant2",players[id].playerId,players[id].mass,{
+    //         success: function(object){
+    //           var game = JSON.parse(object);
+    //           result = game.app42.response.games.game;
+    //            console.log("gameName is : " + result.name)
+    //            var scoreList = result.scores.score;
+    //            console.log("userName is : " + scoreList.userName)
+    //            console.log("scoreId is : " + scoreList.scoreId)
+    //            console.log("value is : " + scoreList.value)
+    //         },
+    //         error:function(error){
+    //       }
+    //   })
+    // }
         if(players[id].playerId === self.socket.id){
           self.player.setPosition( players[id].x , players[id].y);
           self.player.setCollideWorldBounds(true);
@@ -133,23 +149,25 @@ var RoamScene = new Phaser.Class({
         else{ //add others
           addOtherPlayers( self, players[id]);
         }
+        playersList.push(players[id]);
 
-        self.events.emit('boardInit', players);
+
+        self.events.emit('refresh', playersList);
       });
     });
 
     //durring game player adding
     this.socket.on('newPlayer', (playerInfo)=>{
       addOtherPlayers( self, playerInfo);
-        //parth 
-        //parth 
-        //parth 
+        //parth
+        //parth
+        //parth
       let players = [];
       players[0]=playerInfo;
-      self.events.emit('boardInit', players);
-        //parth 
-        //parth 
-        //parth 
+      self.events.emit('refresh', players);
+        //parth
+        //parth
+        //parth
     });
 
     //remove players
@@ -185,16 +203,23 @@ var RoamScene = new Phaser.Class({
         if( playerInfo.playerId === otherPlayer.playerId ){
           otherPlayer.mass= playerInfo.mass;
         }
-        //parth 
-        //parth 
-        //parth 
+        //parth
+        //parth
+        //parth
         let players = [];
         players[0]=playerInfo;
-        self.events.emit('boardInit', players);
-        //parth 
-        //parth 
-        //parth 
+        console.log('massupdate');
+        self.events.emit('refresh', players);
+        //parth
+        //parth
+        //parth
       });
+    });
+
+    this.socket.on('refesh',function (){
+
+        self.events.emit('refresh', playerList);
+
     });
 
     this.socket.on('p2pBattle', function( otherId ){
@@ -225,6 +250,7 @@ var RoamScene = new Phaser.Class({
       self.player.x = Math.floor(Math.random() * 420 ) + 40;
       self.player.y = Math.floor(Math.random() * 420 ) + 40;
       self.scene.stop( 'TypeScene');
+
       //self.events.emit('closeTypeScene');
     });
 
@@ -320,101 +346,57 @@ var HUDScene= new Phaser.Class({
   },
 
   create: function(){
-    var TitleTxt = this.add.text(100,50,'HUD Scene');
+    //var TitleTxt = this.add.text(100,50,'HUD Scene');
     let roamListener = this.scene.get('RoamScene');
 
 
-    var containerWidth = 215;
-    var containerHeight = 5;
-	  var leaderBox = this.add.graphics();
-    leaderBox.fixedToCamera = true;
-    leaderBox.strokeRect(215, 5, 100,100 );
-
-	   var style = { font: "13px Press Start 2P", fill: "black", align: "left", fontSize: '22px'};
-
-    var lb = [];
-    nameContainer = this.add.container(215,6[lb]);
-
-    var x = 0;
-    var y = 0;
-    var self = this;
-
-    roamListener.events.on('boardInit', function(players){
-      for(i = 0; i < lb.length; i++){
-        lb.pop();
-      }
-      console.log('player ids: ');
-      y = 0;
+    roamListener.events.on('refresh', function(players){
 
       Object.keys(players).forEach((id)=>{
-        console.log(players[id].playerId);
-        console.log(players[id].mass);
-
-        y += 10;
-
-        var txt = players[id].playerId;
-        if(txt){
-          userText = self.add.text(50, 50, txt, style);
-
-          userText.setX(x);
-          userText.setY(y);
-
-          lb.push(userText);
-
-        }
-        var mTxt = players[id].mass;
-        if(mTxt){
-          massText = self.add.text(10, 10, mTxt, style);
-
-          massText.setX(x + 140);
-          massText.setY(y);
-
-          lb.push(massText);
-        }
 
 
-        console.log(players[id].username);
+        scoreBoardService.saveUserScore("Typrant2",players[id].playerId,players[id].mass,{
+          success: function(object){
+            var game = JSON.parse(object);
+            result = game.app42.response.games.game;
+             console.log("gameName is : " + result.name)
+             var scoreList = result.scores.score;
+             console.log("userName is : " + scoreList.userName)
+             console.log("scoreId is : " + scoreList.scoreId)
+             console.log("value is : " + scoreList.value)
+          },
+          error:function(error){
+          }
+        })
+
+      });
+      scoreBoardService.getTopNRankers("Typrant2", 10,{
+          success: function(object)
+          {
+           var scorelist = "";
+              var game = JSON.parse(object);
+              result = game.app42.response.games.game;
+              var scoreList = result.scores.score;
+              if (scoreList instanceof Array) {
+                      for (var i = 0; i < scoreList.length; i++) {
+
+                          scorelist += "<tr><td align = \"left\">" + scoreList[i].userName + "</td><td align = \"right\">" + scoreList[i].value.toString() + "</td></tr>";
+
+                      }
+                  }
+                  document.getElementById("leaderboard").innerHTML = "<table width = \"100%\"><tr><td colspan = \"2\"><strong>TOP SCORES</strong></td>"+scorelist+"</table>";
+          },
+          error: function(error) {
+          }
       });
     });
-  //   roamListener.events.on('refresh', function(players){
-  //     for(i = 0; i < lb.length; i++){
-  //       lb.pop();
-  //       console.log("popping");
-  //     }
-  //     console.log('player ids: ');
-  //     y = 0;
-  //
-  //     Object.keys(players).forEach((id)=>{
-  //       console.log(players[id].playerId);
-  //       console.log(players[id].mass);
-  //
-  //       y += 10;
-  //
-  //       var txt = players[id].playerId;
-  //       if(txt){
-  //         userText = self.add.text(10, 10, txt, style);
-  //
-  //         userText.setX(x);
-  //         userText.setY(y);
-  //
-  //         lb.push(userText);
-  //
-  //       }
-  //       var mTxt = players[id].mass;
-  //       if(mTxt){
-  //         massText = self.add.text(10, 10, mTxt, style);
-  //
-  //         massText.setX(x + 140);
-  //         massText.setY(y);
-  //
-  //         lb.push(massText);
-  //       }
-  //
-  //       console.log(players[id].username);
-  //
-  //   });
-  // });
-  }
+
+
+
+
+},
+
+
 
 });
 

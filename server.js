@@ -11,6 +11,7 @@ app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html');
 });
 
+
 io.on('connection', function(socket){
 
   console.log('a user connected');
@@ -97,9 +98,9 @@ io.on('connection', function(socket){
 });
 
 
-/*
+
 server.listen(8081, function () {
     console.log(`Listening on ${server.address().port}`);
 });
-*/
-server.listen( process.env.PORT,process.env.IP);
+
+//server.listen( process.env.PORT,process.env.IP);
