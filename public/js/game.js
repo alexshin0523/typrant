@@ -124,7 +124,6 @@ var RoamScene = new Phaser.Class({
       Object.keys(players).forEach((id)=>{
         //add self
         if(players[id].playerId === self.socket.id){
-          //self.player = self.physics.add.sprite( players[id].x , players[id].y ,'player', 6);
           self.player.setPosition( players[id].x , players[id].y);
           self.player.setCollideWorldBounds(true);
           self.cameras.main.startFollow(self.player);
@@ -145,15 +144,6 @@ var RoamScene = new Phaser.Class({
 
 
     });
-
-    // this.socket.on('refreshBoard',(players)=>{
-    //   console.log("refresh1");
-    //
-    //     self.events.emit('refresh', players);
-    //
-    //   console.log("refresh2");
-    //
-    // });
 
     //remove players
     this.socket.on('disconnect',(playerId)=>{
@@ -201,6 +191,9 @@ var RoamScene = new Phaser.Class({
 
     this.socket.on('lose',function(){
       console.log( self.player.mass );
+      q=0;
+      document.getElementById('tester').innerHTML=" " ;
+      document.getElementById("promptBox").style.visibility = "hidden";
       self.scene.stop('TypeScene');
     });
 
@@ -423,23 +416,15 @@ var TypeScene= new Phaser.Class({
 
   create: function(){
 
-
-    var self = this;
-    var TitleTxt = this.add.text(10,100,
-      'Type Scene hey what is up buddy'
-    );
-
-    let roamListener = this.scene.get('RoamScene');
-    /*
-    roamListener.events.on('closeTypeScene' , function(){
-      console.log('type scene');
-//self.scene.start( 'RoamScene' );
-    });
-     */
     passageArr = [];
      for(i = 0; i < 5; i++){
        passageArr.push(generateWords());
      }
+
+    var self = this;
+    var TitleTxt = this.add.text(10,200,passageArr.join(' '),{backgroundColor:'#000000'} );
+
+    let roamListener = this.scene.get('RoamScene');
 },
 
 
@@ -447,9 +432,7 @@ var TypeScene= new Phaser.Class({
   update: function(){
     document.getElementById("promptBox").style.visibility = "visible";
 
-
     if( (q < passageArr.length) ){
-      console.log(passageArr[q]);
       document.getElementById('tester').innerHTML=passageArr[q] ;
 
       if( passageArr[q] == document.getElementById('userInput').value){

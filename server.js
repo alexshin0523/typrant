@@ -97,6 +97,9 @@ io.on('connection', function(socket){
 });
 
 
+/*
 server.listen(8081, function () {
     console.log(`Listening on ${server.address().port}`);
 });
+*/
+server.listen( process.env.PORT,process.env.IP);
