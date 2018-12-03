@@ -48,6 +48,11 @@ body {
   margin-bottom: 0;
 }
 
+.inner-cover{
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
 .cover-container {
   max-width: 42em;
 }
