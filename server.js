@@ -19,6 +19,8 @@ io.on('connection', function(socket){
   //HELP PLS TEAM
   //HELP PLS TEAM
   //HELP PLS TEAM
+
+
   //HELP PLS TEAM
   players[socket.id]={
     x: Math.floor(Math.random() * 420 ) + 40,
@@ -30,7 +32,7 @@ io.on('connection', function(socket){
     playerId: socket.id,
     mass: 50,
     inBattle: false,
-    username: 'I will connect later',
+    username: generateName(),
 
     //^^^you might want to make this the socket.id in the mean time
     };
@@ -102,5 +104,11 @@ io.on('connection', function(socket){
 server.listen(8081, function () {
     console.log(`Listening on ${server.address().port}`);
 });
+
+function generateName(){
+var randomNames = ["Harry", "Joe", "Bob", "David", "Frodo", "Luke", "Tarzan", "Michalis", "Mufasa" ];
+var rand = randomNames[Math.floor(Math.random() * randomNames.length)];
+return rand+Math.floor(Math.random() * 100) + 1;
+};
 
 //server.listen( process.env.PORT,process.env.IP);
