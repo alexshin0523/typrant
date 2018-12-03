@@ -120,7 +120,6 @@ var RoamScene = new Phaser.Class({
     this.socket = io();
     this.otherPlayers = this.physics.add.group();
     this.player = this.physics.add.sprite( 50 , 50 ,'player', 6);
-
     //at the beginning
     this.socket.on('currentPlayers',function(players){
       Object.keys(players).forEach((id)=>{
@@ -140,6 +139,11 @@ var RoamScene = new Phaser.Class({
 
         self.events.emit('refresh', playersList);
       });
+      console.log(playersList.length);
+      var index = playersList.length -1;
+      console.log(playersList[index].username);
+
+      document.getElementById("showUser").innerHTML= playersList[index].username;
     });
 
     //durring game player adding
@@ -149,6 +153,7 @@ var RoamScene = new Phaser.Class({
       let players = [];
       players[0]=playerInfo;
       self.events.emit('refresh', players);
+
 
     });
 
@@ -167,6 +172,7 @@ var RoamScene = new Phaser.Class({
         if( playerInfo.playerId === otherPlayer.playerId ){
           otherPlayer.setPosition( playerInfo.x, playerInfo.y);
         }
+        console.log(playerInfo.username);
       });
     });
 
