@@ -1,6 +1,7 @@
 var name = "Anonymous";
 var playersList = [];
 
+
 var BootScene = new Phaser.Class({
   Extends: Phaser.Scene,
 
@@ -338,7 +339,7 @@ var HUDScene= new Phaser.Class({
       Object.keys(players).forEach((id)=>{
 
 
-        scoreBoardService.saveUserScore("Typrant3",players[id].username,players[id].mass,{
+        scoreBoardService.saveUserScore("Typrant4",players[id].username,players[id].mass,{
           success: function(object){
             var game = JSON.parse(object);
             result = game.app42.response.games.game;
@@ -353,7 +354,7 @@ var HUDScene= new Phaser.Class({
         })
 
       });
-      scoreBoardService.getTopNRankers("Typrant3", 10,{
+      scoreBoardService.getTopNRankers("Typrant4", 10,{
         success: function(object)
         {
           var scorelist = "";
@@ -367,7 +368,7 @@ var HUDScene= new Phaser.Class({
 
             }
           }
-          document.getElementById("leaderboard").innerHTML = "<table width = \"100%\"><tr><td colspan = \"2\"><strong>TOP SCORES</strong></td>"+scorelist+"</table>";
+          document.getElementById("leaderboard").innerHTML = "<table width = \"100%\"><tr><td colspan = \"2\"><strong>Leaderboard</strong></td>"+scorelist+"</table>";
         },
         error: function(error) {
         }
