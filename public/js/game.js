@@ -208,7 +208,7 @@ var RoamScene = new Phaser.Class({
     });
 
     this.socket.on('p2pBattle', function( otherId ){
-      console.log(otherId);
+      self.cameras.main.shake( 300 );
       self.player.inBattle = true;
       self.scene.launch( 'TypeScene' );
       self.otherId = otherId ;
@@ -217,6 +217,10 @@ var RoamScene = new Phaser.Class({
     this.socket.on('lose',function(){
       console.log( self.player.mass );
       q=0;
+      self.cameras.main.shake( 300 );
+      self.player.x = Math.floor(Math.random() * 420 ) + 40;
+      self.player.y = Math.floor(Math.random() * 420 ) + 40;
+      self.socket.emit('playerMovement',{x:self.player.x,y:self.player.y});
       document.getElementById('tester').innerHTML=" " ;
       document.getElementById("promptBox").style.visibility = "hidden";
       self.scene.stop('TypeScene');
@@ -230,10 +234,11 @@ var RoamScene = new Phaser.Class({
     let battleListener = this.scene.get('TypeScene');
     battleListener.events.on('battleEnd', function(players){
       console.log('battle end');
-      self.socket.emit('playerMovement',{x:self.player.x,y:self.player.y});
       self.socket.emit( 'typeSceneEnd' , self.socket.id, self.otherId );
+      self.cameras.main.shake( 300 );
       self.player.x = Math.floor(Math.random() * 420 ) + 40;
       self.player.y = Math.floor(Math.random() * 420 ) + 40;
+      self.socket.emit('playerMovement',{x:self.player.x,y:self.player.y});
       self.scene.stop( 'TypeScene');
 
       //self.events.emit('closeTypeScene');
