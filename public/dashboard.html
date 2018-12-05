@@ -117,124 +117,75 @@
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
+                  <th>Spelling Words</th>
+                  <th>Problem Words</th>
+                  <th>Easiest Words</th>
+                  <th>Top Scorers</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>1</td>
-                  <td>Lorem</td>
-                  <td>ipsum</td>
-                  <td>dolor</td>
-                  <td>sit</td>
+                  <td>Procrastinate</td>
+                  <td>Neglect</td>
+                  <td>This</td>
+                  <td>Asish</td>
                 </tr>
                 <tr>
                   <td>2</td>
-                  <td>amet</td>
-                  <td>consectetur</td>
-                  <td>adipiscing</td>
-                  <td>elit</td>
+                  <td>Antidisestablishmentarianism</td>
+                  <td>Connoisseur</td>
+                  <td>Fork</td>
+                  <td>Brian</td>
                 </tr>
                 <tr>
                   <td>3</td>
-                  <td>Integer</td>
-                  <td>nec</td>
-                  <td>odio</td>
-                  <td>Praesent</td>
+                  <td>Caltrop</td>
+                  <td>Wiles</td>
+                  <td>There</td>
+                  <td>George</td>
                 </tr>
                 <tr>
                   <td>4</td>
-                  <td>dapibus</td>
-                  <td>diam</td>
-                  <td>Sed</td>
-                  <td>nisi</td>
+                  <td>Hard</td>
+                  <td>Tragic</td>
+                  <td>Fries</td>
+                  <td>Nisi</td>
                 </tr>
                 <tr>
                   <td>5</td>
-                  <td>Nulla</td>
-                  <td>quis</td>
-                  <td>sem</td>
-                  <td>at</td>
+                  <td>Privvy</td>
+                  <td>Forest</td>
+                  <td>Nope</td>
+                  <td>Ted</td>
                 </tr>
                 <tr>
                   <td>6</td>
-                  <td>nibh</td>
+                  <td>Zero</td>
                   <td>elementum</td>
-                  <td>imperdiet</td>
-                  <td>Duis</td>
+                  <td>Sue</td>
+                  <td>Sarah</td>
                 </tr>
                 <tr>
                   <td>7</td>
-                  <td>sagittis</td>
-                  <td>ipsum</td>
-                  <td>Praesent</td>
-                  <td>mauris</td>
-                </tr>
-                <tr>
-                  <td>8</td>
-                  <td>Fusce</td>
-                  <td>nec</td>
-                  <td>tellus</td>
-                  <td>sed</td>
-                </tr>
-                <tr>
-                  <td>9</td>
-                  <td>augue</td>
-                  <td>semper</td>
-                  <td>porta</td>
+                  <td>Quest</td>
+                  <td>Watershed</td>
+                  <td>It</td>
                   <td>Mauris</td>
                 </tr>
                 <tr>
-                  <td>10</td>
-                  <td>massa</td>
-                  <td>Vestibulum</td>
-                  <td>lacinia</td>
-                  <td>arcu</td>
+                  <td>8</td>
+                  <td>Typewriter</td>
+                  <td>Twitch</td>
+                  <td>Tell</td>
+                  <td>Sid</td>
                 </tr>
                 <tr>
-                  <td>11</td>
-                  <td>eget</td>
-                  <td>nulla</td>
-                  <td>Class</td>
-                  <td>aptent</td>
-                </tr>
-                <tr>
-                  <td>12</td>
-                  <td>taciti</td>
-                  <td>sociosqu</td>
-                  <td>ad</td>
-                  <td>litora</td>
-                </tr>
-                <tr>
-                  <td>13</td>
-                  <td>torquent</td>
-                  <td>per</td>
-                  <td>conubia</td>
-                  <td>nostra</td>
-                </tr>
-                <tr>
-                  <td>14</td>
-                  <td>per</td>
-                  <td>inceptos</td>
-                  <td>himenaeos</td>
-                  <td>Curabitur</td>
-                </tr>
-                <tr>
-                  <td>15</td>
-                  <td>sodales</td>
-                  <td>ligula</td>
-                  <td>in</td>
-                  <td>libero</td>
-                </tr>
-                <tr>
-                  <td>16</td>
-                  <td>libero</td>
-                  <td>Sed</td>
-                  <td>cursus</td>
-                  <td>ante</td>
+                  <td>9</td>
+                  <td>Arugue</td>
+                  <td>Tyranny</td>
+                  <td>Us</td>
+                  <td>Maury</td>
                 </tr>
               </tbody>
             </table>
@@ -262,11 +213,13 @@
     <script>
       var ctx = document.getElementById("myChart");
       var myChart = new Chart(ctx, {
+	
         type: 'line',
         data: {
-          labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          labels: ["Jan", "Feb", "Mar", "April", "May", "June", "July"],
           datasets: [{
-            data: [15339, 21345, 18483, 24003, 23489, 24092, 12034],
+	    label: 'Average Student WPM',
+            data: [33, 38, 42, 49, 54, 60, 62],
             lineTension: 0,
             backgroundColor: 'transparent',
             borderColor: '#007bff',
@@ -283,7 +236,7 @@
             }]
           },
           legend: {
-            display: false,
+            display: true,
           }
         }
       });
