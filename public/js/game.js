@@ -399,7 +399,7 @@ var TypeScene= new Phaser.Class({
     }
 
     var self = this;
-    var TitleTxt = this.add.text(10,200,passageArr.join(' '),{backgroundColor:'#333'} );
+    //var TitleTxt = this.add.text(10,200,passageArr.join(' '),{backgroundColor:'#333'} );
 
     let roamListener = this.scene.get('RoamScene');
   },
