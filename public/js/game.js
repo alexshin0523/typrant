@@ -39,9 +39,9 @@ var MenuScene = new Phaser.Class({
     document.getElementById("promptBox").style.visibility = "hidden";
 
     var style = { font: "12px Arial", fill: "#ffffff", align: "center" };
-    var TitleTxt = this.add.text(120,10,'Menu Scene',style);
-    var InstructionTxt = this.add.text(120,75,'Instructions',style);
-    var InputTxt = this.add.text(120,125,'Enter Username',style);
+    var TitleTxt = this.add.text(120,10,'Typrant',style);
+    var InstructionTxt = this.add.text(120,100,'Instructions',style);
+    // var InputTxt = this.add.text(120,125,'Enter Username',style);
     var AdvanceTxt = this.add.text(120,175,'Play',style);
 
     AdvanceTxt.setInteractive();
@@ -54,17 +54,17 @@ var MenuScene = new Phaser.Class({
       },
       this
     );
-    InputTxt.setInteractive();
-    InputTxt.on(
-      'pointerdown',
-      function()
-      {
-        document.getElementById("inputBox").style.visibility = "visible";
-        document.getElementById("userInput").placeholder = "Enter username";
-
-      },
-      this
-    );
+    // InputTxt.setInteractive();
+    // InputTxt.on(
+    //   'pointerdown',
+    //   function()
+    //   {
+    //     document.getElementById("inputBox").style.visibility = "visible";
+    //     document.getElementById("userInput").placeholder = "Enter username";
+    //
+    //   },
+    //   this
+    // );
     InstructionTxt.setInteractive();
     InstructionTxt.on(
       'pointerdown',
@@ -92,7 +92,7 @@ var InstructionScene = new Phaser.Class({
   },
 
   create: function(){
-    this.add.image(160,120,'instructions');
+    this.add.image(180,120,'instructions');
     var backTxt = this.add.text(10,10, 'Back');
     backTxt.setInteractive();
     backTxt.on(
